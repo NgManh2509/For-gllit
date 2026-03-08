@@ -142,13 +142,13 @@ export default function MusicPlayer() {
         setStarted(true)
       }
     }
-    window.addEventListener('click',   start, { once: true })
-    window.addEventListener('scroll',  start, { once: true })
-    window.addEventListener('keydown', start, { once: true })
+    window.addEventListener('pointerdown', start, { once: true })
+    window.addEventListener('touchstart',  start, { once: true })
+    window.addEventListener('keydown',     start, { once: true })
     return () => {
-      window.removeEventListener('click',   start)
-      window.removeEventListener('scroll',  start)
-      window.removeEventListener('keydown', start)
+      window.removeEventListener('pointerdown', start)
+      window.removeEventListener('touchstart',  start)
+      window.removeEventListener('keydown',     start)
     }
   }, [started])
 
