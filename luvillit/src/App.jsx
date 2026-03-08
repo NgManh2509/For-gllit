@@ -1,6 +1,9 @@
 import './index.css'
 import MusicPlayer from './components/MusicPlayer'
 import VideoBackGround from './components/VideoBackGround'
+import NavBar from './components/NavBar'
+import HeroSection from './components/HeroSection'
+
 
 function App() {
   return (
@@ -9,10 +12,11 @@ function App() {
       <VideoBackGround />
 
       {/* Navbar */}
+      <NavBar />
 
       {/* Sections */}
       <main>
-        <section id="hero"></section>
+        <HeroSection />
         <section id="about"></section>
         <section id="members"></section>
         <section id="achievements"></section>
