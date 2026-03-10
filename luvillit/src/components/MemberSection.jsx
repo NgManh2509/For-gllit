@@ -3,8 +3,13 @@ import CurveTextUp from '@/supports/curveTextUp'
 import NoiseCard from '@/supports/NoiseCard'
 import MemberFrame from '@/components/MemberFrame'
 
-const memberFace = ['memberSectionImg/irohaFace.png', 'memberSectionImg/minjuFace.png', 'memberSectionImg/mokaFace.png', 'memberSectionImg/wonheeFace.png', 'memberSectionImg/yunahFace.png']
-
+const memberFace = [
+  `${import.meta.env.BASE_URL}memberSectionImg/irohaFace.png`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/minjuFace.png`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/mokaFace.png`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/wonheeFace.png`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/yunahFace.png`
+];
 const MemberSection = () => {
   return (
     <div id="member"
@@ -17,7 +22,7 @@ const MemberSection = () => {
       }}>
         
       <NoiseCard 
-        imageUrl="/memberSectionImg/mem.png" 
+        imageUrl={`${import.meta.env.BASE_URL}memberSectionImg/mem.png`}        
         animated={false}       
         noiseOpacity={0.2}    
         width="w-full"         

@@ -28,7 +28,7 @@ const HeroSection = () => {
     >
       {/* ── Background: ảnh trải toàn section ── */}
       <img
-        src="/grpPhoto.jpg"
+        src={`${import.meta.env.BASE_URL}grpPhoto.jpg`}
         alt="ILLIT background"
         style={{
           position: 'absolute',

@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
 const playlist = [
-  { src: '/music/track1.mp3',  name: 'Not me' },
-  { src: '/music/track2.mp3',  name: 'Not cute anymore' },
-  { src: '/music/track3.mp3',  name: 'Tick-Tack' },
-  { src: '/music/track4.mp3',  name: 'Iykyk' },
-  { src: '/music/track5.mp3',  name: 'Pimple' },
-  { src: '/music/track6.mp3',  name: 'oops' },
-  { src: '/music/track7.mp3',  name: 'jellyous' },
-  { src: '/music/track8.mp3',  name: 'I’ll Like You' },
-  { src: '/music/track9.mp3',  name: 'Cherish (My Love)' },
-  { src: '/music/track10.mp3', name: 'Do the dance' },
-  { src: '/music/track11.mp3', name: 'little monster' },
-  { src: '/music/track12.mp3', name: '밤소풍' },
-]
-
+  { src: `${import.meta.env.BASE_URL}music/track1.mp3`,  name: 'Not me' },
+  { src: `${import.meta.env.BASE_URL}music/track2.mp3`,  name: 'Not cute anymore' },
+  { src: `${import.meta.env.BASE_URL}music/track3.mp3`,  name: 'Tick-Tack' },
+  { src: `${import.meta.env.BASE_URL}music/track4.mp3`,  name: 'Iykyk' },
+  { src: `${import.meta.env.BASE_URL}music/track5.mp3`,  name: 'Pimple' },
+  { src: `${import.meta.env.BASE_URL}music/track6.mp3`,  name: 'oops' },
+  { src: `${import.meta.env.BASE_URL}music/track7.mp3`,  name: 'jellyous' },
+  { src: `${import.meta.env.BASE_URL}music/track8.mp3`,  name: 'I’ll Like You' },
+  { src: `${import.meta.env.BASE_URL}music/track9.mp3`,  name: 'Cherish (My Love)' },
+  { src: `${import.meta.env.BASE_URL}music/track10.mp3`, name: 'Do the dance' },
+  { src: `${import.meta.env.BASE_URL}music/track11.mp3`, name: 'little monster' },
+  { src: `${import.meta.env.BASE_URL}music/track12.mp3`, name: '밤소풍' },
+];
 // ── SVG Icons ──────────────────────────────────────────────
 const IconPrev = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
