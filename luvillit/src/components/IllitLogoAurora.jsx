@@ -11,7 +11,7 @@ import React from 'react'
 const IllitLogoAurora = ({
   height = 36,
   colors = ['#FF8A9D', '#B6B5D8', '#89CFF0', '#FF8A9D'],
-  speed = 4,
+  speed = 25,
   className = '',
 }) => {
   const gradientId = 'illit-aurora-gradient'

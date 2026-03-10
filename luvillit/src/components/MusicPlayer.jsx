@@ -126,8 +126,32 @@ export default function MusicPlayer() {
     dragState.current.dragging = false
     const el = playerRef.current
     if (el) {
-      el.style.transition = ''
-      el.style.cursor     = ''
+      const W       = window.innerWidth
+      const H       = window.innerHeight
+      const pw      = el.offsetWidth
+      const ph      = el.offsetHeight
+      const PAD     = 12
+
+      setPos(prev => {
+        const { x, y } = prev
+
+        // Khoảng cách đến 4 cạnh
+        const distLeft   = x
+        const distRight  = W - pw - x
+        const distTop    = y
+        const distBottom = H - ph - y
+
+        const minDist = Math.min(distLeft, distRight, distTop, distBottom)
+
+        if (minDist === distLeft)   return { x: PAD,          y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+        if (minDist === distRight)  return { x: W - pw - PAD, y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+        if (minDist === distTop)    return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: PAD }
+        /* distBottom */            return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: H - ph - PAD }
+      })
+
+      el.style.transition = 'left 0.3s cubic-bezier(0.25,0.46,0.45,0.94), top 0.3s cubic-bezier(0.25,0.46,0.45,0.94)'
+      setTimeout(() => { if (el) el.style.transition = '' }, 350)
+      el.style.cursor = ''
     }
     window.removeEventListener('pointermove', onPointerMove)
     window.removeEventListener('pointerup',   onPointerUp)
@@ -142,11 +166,11 @@ export default function MusicPlayer() {
         setStarted(true)
       }
     }
-    window.addEventListener('pointerdown', start, { once: true })
+    window.addEventListener('click', start, { once: true })
     window.addEventListener('touchstart',  start, { once: true })
     window.addEventListener('keydown',     start, { once: true })
     return () => {
-      window.removeEventListener('pointerdown', start)
+      window.removeEventListener('click', start)
       window.removeEventListener('touchstart',  start)
       window.removeEventListener('keydown',     start)
     }
