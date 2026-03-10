@@ -1,34 +1,21 @@
 import React from 'react'
 import CurveTextUp from '@/supports/curveTextUp'
-import CurveTextDown from '@/supports/curveText'
 import NoiseCard from '@/supports/NoiseCard'
 import MemberFrame from '@/components/MemberFrame'
 
-
 const memberFace = ['memberSectionImg/irohaFace.png', 'memberSectionImg/minjuFace.png', 'memberSectionImg/mokaFace.png', 'memberSectionImg/wonheeFace.png', 'memberSectionImg/yunahFace.png']
+
 const MemberSection = () => {
   return (
     <div id="member"
       style={{
         fontFamily: '"Outfit Variable", Outfit, sans-serif',
-        position: 'relative', // Gốc để các thành phần absolute căn theo
+        position: 'relative', 
         width: '100%',
-        overflow: 'hidden', // Giữ bo góc cho ảnh
+        overflow: 'hidden', 
         backgroundColor: '#000',
       }}>
         
-      {/* 1. Ảnh đóng vai trò vật chủ: Không dùng absolute nữa */}
-      {/* Cách này giúp section tự động cao bằng đúng tấm ảnh của bạn */}
-      {/* <img 
-        src="/memberSectionImg/mem.png" 
-        alt="memberPhoto2"  
-        style={{
-          display: 'block',
-          width: '100%',
-          height: 'auto', // Hiển thị full 100% tỉ lệ ảnh, không bị cắt
-          zIndex: 0,
-        }}  
-      /> */}
       <NoiseCard 
         imageUrl="/memberSectionImg/mem.png" 
         animated={false}       
@@ -36,6 +23,7 @@ const MemberSection = () => {
         width="w-full"         
         height="h-auto"        
       />
+
       <div className="absolute top-[33.2%] left-[68.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
         <MemberFrame 
           imageUrl={memberFace[2]} 
@@ -68,7 +56,7 @@ const MemberSection = () => {
           height="h-[155px]" 
         />
       </div>
-      <div className="absolute top-[48.8%] left-[19.5%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div className="absolute top-[48.8%] left-[19.22%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
         <MemberFrame 
           imageUrl={memberFace[1]} 
           name="Minju" 
@@ -76,7 +64,7 @@ const MemberSection = () => {
           height="h-[200px]" 
         />
       </div>
-      <div className='absolute inset-0 bg-gray/60 backdrop-blur-[1.5px]' />
+      <div className='absolute inset-0 backdrop-blur-[1.5px]' />
 
       {/* 2. Text đè lên phía trên cùng của ảnh */}
       <div style={{ 
@@ -99,6 +87,40 @@ const MemberSection = () => {
           interactive={true}
           className="text-white"
         />
+      </div>
+      <div className="absolute top-[10%] left-[5%] z-30 text-white/40 text-[10px] uppercase tracking-[0.3em] font-light">
+        <p>Belift Lab // New Era</p>
+        <p>Est. 2024</p>
+      </div>
+
+      {/* Khối 2: Giữa ảnh, nằm dọc phía trái */}
+      <div className="absolute top-[40%] left-[2%] z-30 text-white/30 text-[9px] uppercase tracking-[0.5em] font-extralight [writing-mode:vertical-lr] rotate-180">
+        Super Real Me - Magnetic - Lucky Girl Syndrome
+      </div>
+
+      {/* Khối 3: Góc phải dưới */}
+      <div className="absolute bottom-[25%] right-[5%] z-30 text-right text-white/50 text-[11px] font-extralight tracking-widest italic">
+        <p>"Not cute anymore. Not me"</p>
+        <p className="not-italic text-[8px] mt-1 opacity-60">© 2026 ILLIT Official</p>
+      </div>
+      {/* --- CREDIT TEXT Ở CHÍNH GIỮA ĐÁY (Màu Gray) --- */}
+      <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 z-30 w-full max-w-[600px] text-center">
+        <div className="flex flex-col gap-2 items-center">
+          
+          {/* Dòng 1: Xám vừa (gray-400) */}
+          <p className="text-[9px] font-extralight tracking-[0.6em] text-gray-400 uppercase leading-none">
+            Creative Direction by Belift Lab / Visual Identity Program
+          </p>
+          {/* Dòng 3: Xám đậm hơn chút (gray-500) */}
+          <p className="text-[8px] font-thin tracking-[0.8em] text-gray-500 uppercase leading-none">
+            ISO 400 // SHUTTER 1/125 // F2.8 // ILLIT_OFFICIAL_ARCHIVE
+          </p>
+          
+          {/* Dòng 4: Xám rất mờ (gray-600) */}
+          <p className="text-[7px] font-thin tracking-[0.4em] text-gray-600 uppercase mt-2">
+            © 2026 All Rights Reserved. Produced for Super Real Me
+          </p>
+        </div>
       </div>
     </div>
   )
