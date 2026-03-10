@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       # 1. CÀI ĐẶT NODE.JS ĐỂ MÔI TRƯỜNG HIỂU LỆNH NPM
       - name: Setup Node.js
