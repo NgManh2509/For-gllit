@@ -3,6 +3,7 @@ import MusicPlayer from './components/MusicPlayer'
 import VideoBackGround from './components/VideoBackGround'
 import NavBar from './components/NavBar'
 import HeroSection from './components/HeroSection'
+import MemberSection from './components/MemberSection'
 
 
 function App() {
@@ -17,9 +18,11 @@ function App() {
       {/* Sections */}
       <main>
         <HeroSection />
-        <section id="about"></section>
+        <section id="about">
+          <MemberSection />
+        </section>
         <section id="members"></section>
-        <section id="achievements"></section>
+        <section id="achievements" style={{ minHeight: '100vh', background: '#000' }}></section>
       </main>
 
       {/* Footer */}

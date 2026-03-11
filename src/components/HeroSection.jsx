@@ -1,5 +1,6 @@
 import React from 'react'
 import { TextHighlighter } from '../supports/textHighlighter'
+import ThreeDCard from '../supports/ThreeDCard'
 
 const tracks = [
   { num: '01', title: 'MY WORLD',            highlight: false, align: 'left'   },
@@ -27,7 +28,7 @@ const HeroSection = () => {
     >
       {/* ── Background: ảnh trải toàn section ── */}
       <img
-        src="/grpPhoto.jpg"
+        src={`${import.meta.env.BASE_URL}grpPhoto.jpg`}
         alt="ILLIT background"
         style={{
           position: 'absolute',
@@ -41,6 +42,7 @@ const HeroSection = () => {
           borderRadius: '28px 28px 0 0',
         }}
       />
+      
 
       {/* ── Gradient overlay: trong suốt ở trên → tối ở dưới ── */}
       <div style={{
@@ -91,7 +93,23 @@ const HeroSection = () => {
             color: 'rgba(255,255,255,0.75)',
             textTransform: 'uppercase',
           }}>
-            SUPER REAL ME&nbsp;&nbsp;{'///'}&nbsp;&nbsp;EP
+            <TextHighlighter
+              triggerType="inView"
+              highlightColor={PINK}
+              useInViewOptions={{ once: true, amount: 0.3 }}
+              transition={{ type: 'ease', duration: 0.5, delay: 0.1 }}
+              rounded="rounded-none"
+              style={{
+                fontSize: 'clamp(9px, 1.1vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.25em',
+                color: '#000000',
+                lineHeight: 1.4,
+                display: 'inline',
+              }}
+            >
+              SUPER REAL ME&nbsp;&nbsp;{'///'}&nbsp;&nbsp;EP
+            </TextHighlighter>
           </div>
 
           <span style={{

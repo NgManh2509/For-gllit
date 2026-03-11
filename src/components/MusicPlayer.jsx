@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
 const playlist = [
-  { src: '/music/track1.mp3',  name: 'Not me' },
-  { src: '/music/track2.mp3',  name: 'Not cute anymore' },
-  { src: '/music/track3.mp3',  name: 'Tick-Tack' },
-  { src: '/music/track4.mp3',  name: 'Iykyk' },
-  { src: '/music/track5.mp3',  name: 'Pimple' },
-  { src: '/music/track6.mp3',  name: 'oops' },
-  { src: '/music/track7.mp3',  name: 'jellyous' },
-  { src: '/music/track8.mp3',  name: 'I’ll Like You' },
-  { src: '/music/track9.mp3',  name: 'Cherish (My Love)' },
-  { src: '/music/track10.mp3', name: 'Do the dance' },
-  { src: '/music/track11.mp3', name: 'little monster' },
-  { src: '/music/track12.mp3', name: '밤소풍' },
-]
-
+  { src: `${import.meta.env.BASE_URL}music/track1.mp3`,  name: 'Not me' },
+  { src: `${import.meta.env.BASE_URL}music/track2.mp3`,  name: 'Not cute anymore' },
+  { src: `${import.meta.env.BASE_URL}music/track3.mp3`,  name: 'Tick-Tack' },
+  { src: `${import.meta.env.BASE_URL}music/track4.mp3`,  name: 'Iykyk' },
+  { src: `${import.meta.env.BASE_URL}music/track5.mp3`,  name: 'Pimple' },
+  { src: `${import.meta.env.BASE_URL}music/track6.mp3`,  name: 'oops' },
+  { src: `${import.meta.env.BASE_URL}music/track7.mp3`,  name: 'jellyous' },
+  { src: `${import.meta.env.BASE_URL}music/track8.mp3`,  name: 'I’ll Like You' },
+  { src: `${import.meta.env.BASE_URL}music/track9.mp3`,  name: 'Cherish (My Love)' },
+  { src: `${import.meta.env.BASE_URL}music/track10.mp3`, name: 'Do the dance' },
+  { src: `${import.meta.env.BASE_URL}music/track11.mp3`, name: 'little monster' },
+  { src: `${import.meta.env.BASE_URL}music/track12.mp3`, name: '밤소풍' },
+];
 // ── SVG Icons ──────────────────────────────────────────────
 const IconPrev = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -126,8 +125,32 @@ export default function MusicPlayer() {
     dragState.current.dragging = false
     const el = playerRef.current
     if (el) {
-      el.style.transition = ''
-      el.style.cursor     = ''
+      const W       = window.innerWidth
+      const H       = window.innerHeight
+      const pw      = el.offsetWidth
+      const ph      = el.offsetHeight
+      const PAD     = 12
+
+      setPos(prev => {
+        const { x, y } = prev
+
+        // Khoảng cách đến 4 cạnh
+        const distLeft   = x
+        const distRight  = W - pw - x
+        const distTop    = y
+        const distBottom = H - ph - y
+
+        const minDist = Math.min(distLeft, distRight, distTop, distBottom)
+
+        if (minDist === distLeft)   return { x: PAD,          y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+        if (minDist === distRight)  return { x: W - pw - PAD, y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+        if (minDist === distTop)    return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: PAD }
+        /* distBottom */            return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: H - ph - PAD }
+      })
+
+      el.style.transition = 'left 0.3s cubic-bezier(0.25,0.46,0.45,0.94), top 0.3s cubic-bezier(0.25,0.46,0.45,0.94)'
+      setTimeout(() => { if (el) el.style.transition = '' }, 350)
+      el.style.cursor = ''
     }
     window.removeEventListener('pointermove', onPointerMove)
     window.removeEventListener('pointerup',   onPointerUp)
@@ -142,11 +165,11 @@ export default function MusicPlayer() {
         setStarted(true)
       }
     }
-    window.addEventListener('pointerdown', start, { once: true })
+    window.addEventListener('click', start, { once: true })
     window.addEventListener('touchstart',  start, { once: true })
     window.addEventListener('keydown',     start, { once: true })
     return () => {
-      window.removeEventListener('pointerdown', start)
+      window.removeEventListener('click', start)
       window.removeEventListener('touchstart',  start)
       window.removeEventListener('keydown',     start)
     }

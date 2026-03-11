@@ -1,5 +1,13 @@
+// Lấy base path từ cấu hình Vite (sẽ là '/For-gllit/')
+const BASE = import.meta.env.BASE_URL;
 
-const introVoice = ['/voice/irohaIntroduce.mp3', '/voice/mokaIntro.mp3', '/voice/minjuintro.mp3', '/voice/yunahIntro.mp3', '/voice/wonheeIntro.mp3']
+const introVoice = [
+  `${BASE}voice/irohaIntroduce.mp3`, 
+  `${BASE}voice/mokaIntro.mp3`, 
+  `${BASE}voice/minjuintro.mp3`, 
+  `${BASE}voice/yunahIntro.mp3`, 
+  `${BASE}voice/wonheeIntro.mp3`
+];
 
 const calculateAge = (birthDateStr) => {
   const birth = new Date(birthDateStr)
@@ -29,7 +37,7 @@ const members = [
         groupDebut:'March 25, 2024',
         color:'#FF8A9D',
         pos : 'Center, Lead Vocalist, Face of the Group',
-        image: ['/memberImages/wonhee1.jpg', '/memberImages/wonhee2.jpg', '/memberImages/wonhee3.jpg' ],
+        image: [`${BASE}memberImages/wonhee1.jpg`, `${BASE}memberImages/wonhee2.jpg`, `${BASE}memberImages/wonhee3.jpg`],
         bio : 'Born in 2007, Wonhee is the undeniable center and "stan attractor" of ILLIT. Despite her short training period, her natural talent, distinctively cute visuals, and rapid improvement earned her the top spot on R U Next?. Her bubbly personality and lovely vocal color perfectly embody the group\'s dreamy, youthful identity.'
     }, 
     {
@@ -48,7 +56,7 @@ const members = [
         groupDebut:'March 25, 2024',
         color:'#FFFF00',
         pos : 'Main Vocalist, Visual',
-        image: ['/memberImages/minju1.jpg', '/memberImages/minju2.jpg', '/memberImages/minju3.jpg' ],
+        image: [`${BASE}memberImages/minju1.jpg`, `${BASE}memberImages/minju2.jpg`, `${BASE}memberImages/minju3.jpg`],
         bio : 'Born in 2004, Minju is celebrated for her unique, alluring vocal tone and striking visuals. A former YG trainee, she possesses a quiet but deeply captivating aura. She easily draws audiences in with her emotional singing and elegant dance lines, making her a standout performer in every concept.'
     },
     {
@@ -67,7 +75,7 @@ const members = [
         groupDebut:'March 25, 2024',
         color:'#B6B5D8',
         pos : 'Lead Dancer, Sub Vocalist',
-        image: ['/memberImages/moka1.jpg', '/memberImages/moka2.jpg', '/memberImages/moka3.jpg' ],
+        image: [`${BASE}memberImages/moka1.jpg`, `${BASE}memberImages/moka2.jpg`, `${BASE}memberImages/moka3.jpg`],
         bio : 'Born in 2004 in Japan, Moka is known for her incredible stage presence and expressive facial expressions. She excels in executing complex choreography with a charming, fairy-like vibe. Always deeply passionate about her performances, Moka brings a sweet, refreshing energy that instantly melts the hearts of her fans.'
     },
     {
@@ -86,7 +94,7 @@ const members = [
         groupDebut:'March 25, 2024',
         color:'#89CFF0',
         pos : 'Main Dancer, Sub Vocalist, Maknae',
-        image: ['/memberImages/iroha1.jpg', '/memberImages/iroha2.jpg', '/memberImages/iroha3.jpg' ],
+        image: [`${BASE}memberImages/iroha1.jpg`, `${BASE}memberImages/iroha2.jpg`, `${BASE}memberImages/iroha3.jpg`],
         bio : 'Born in 2008 in Japan, Iroha is the group\'s talented maknae and main dancer. Having danced since childhood, she boasts incredible rhythm, groove, and technical skill. Despite her young age and soft-spoken nature off-stage, she transforms into a fierce, charismatic performer the moment the music starts playing.'
     },
     {
@@ -105,7 +113,7 @@ const members = [
         groupDebut:'March 25, 2024',
         color:'#7f0000',
         pos : 'Leader, Lead Vocalist, Lead Dancer',
-        image: ['/memberImages/yunah1.jpg', '/memberImages/yunah2.jpg', '/memberImages/yunah3.jpg' ],
+        image: [`${BASE}memberImages/yunah1.jpg`, `${BASE}memberImages/yunah2.jpg`, `${BASE}memberImages/yunah3.jpg`],
         bio : 'Born in 2004, Yunah is the energetic and charismatic older sister of the group. With over 4 years of training, she brings a powerful presence and stable vocals to the stage. Known for her infectious laughter and unofficial leadership qualities, she constantly motivates her teammates and captivates fans with her dynamic performances.'
     }
 ]

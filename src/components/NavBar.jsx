@@ -79,10 +79,10 @@ const Navbar = () => {
 
         {/* Menu bên trái */}
         <div className="flex-1 flex items-center gap-10">
-          <a href="#introduct" className="hover:text-gray-300 transition-colors duration-300">
+          <a href="#hero" className="hover:text-gray-300 transition-colors duration-300">
             Introduct
           </a>
-          <a href="#members" className="hover:text-gray-300 transition-colors duration-300"
+          <a href="#member" className="hover:text-gray-300 transition-colors duration-300"
             style={{ display: 'inline-flex' }}>
             {displayChars.map((ch, i) => (
               <span key={i} style={{ display: 'inline-block', width: '0.9em', textAlign: 'center' }}>
