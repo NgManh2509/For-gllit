@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import CurveTextUp from '@/supports/curveTextUp'
 import NoiseCard from '@/supports/NoiseCard'
 import MemberFrame from '@/components/MemberFrame'
+import members from '@/data/member.js'
+import MemberCard from './MemberCard'
 
 const memberFace = [
   `${import.meta.env.BASE_URL}memberSectionImg/irohaFace.png`, 
@@ -11,6 +14,28 @@ const memberFace = [
   `${import.meta.env.BASE_URL}memberSectionImg/yunahFace.png`
 ];
 const MemberSection = () => {
+  const [selectedMember, setSelectedMember] = useState(null);
+  const audioRef = useRef(null);
+  const handleMemberClick = (stageName) => {
+    const foundMember = members.find(m => m.stageName === stageName);
+    setSelectedMember(foundMember);
+  }
+
+  const handleCloseCard = () =>{
+    setSelectedMember(null);
+    if(audioRef.current)
+    {
+      audioRef.current.pause();
+    }
+  }
+
+  const handlePlayAudio = (audioPath) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    audioRef.current = new Audio(audioPath);
+    audioRef.current.play();
+  };
   return (
     <div id="member"
       style={{
@@ -29,7 +54,10 @@ const MemberSection = () => {
         height="h-auto"        
       />
 
-      <div className="absolute top-[33.2%] left-[68.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div 
+          className="absolute top-[33.2%] left-[68.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"
+          onClick={() => handleMemberClick('Moka')}      
+      > 
         <MemberFrame 
           imageUrl={memberFace[2]} 
           name="Moka" 
@@ -37,7 +65,10 @@ const MemberSection = () => {
           height="h-[200px]" 
         />
       </div>
-      <div className="absolute top-[20.4%] left-[54.8%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div 
+        className="absolute top-[20.4%] left-[54.8%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"
+        onClick={() => handleMemberClick('Yunah')}      
+      > 
         <MemberFrame 
           imageUrl={memberFace[4]} 
           name="Yunah" 
@@ -45,7 +76,10 @@ const MemberSection = () => {
           height="h-[145px]" 
         />
       </div>
-      <div className="absolute top-[35%] left-[39.3%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div 
+        className="absolute top-[35%] left-[39.3%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"
+        onClick={() => handleMemberClick('Iroha')}      
+      > 
         <MemberFrame 
           imageUrl={memberFace[0]} 
           name="Iroha" 
@@ -53,7 +87,10 @@ const MemberSection = () => {
           height="h-[150px]" 
         />
       </div>
-      <div className="absolute top-[21%] left-[16.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div  
+        className="absolute top-[21%] left-[16.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"
+        onClick={() => handleMemberClick('Wonhee')}      
+      > 
         <MemberFrame 
           imageUrl={memberFace[3]} 
           name="Wonhee" 
@@ -61,7 +98,10 @@ const MemberSection = () => {
           height="h-[155px]" 
         />
       </div>
-      <div className="absolute top-[48.8%] left-[19.22%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"> 
+      <div  
+        className="absolute top-[48.8%] left-[19.22%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"
+        onClick={() => handleMemberClick('Minju')}      
+      > 
         <MemberFrame 
           imageUrl={memberFace[1]} 
           name="Minju" 
@@ -127,6 +167,29 @@ const MemberSection = () => {
           </p>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedMember && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Lớp mờ nền đằng sau */}
+            <motion.div 
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+              onClick={handleCloseCard}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            
+            {/* Component Card hiện lên */}
+            <div className="relative z-50 flex items-center justify-center pointer-events-none">
+              <div className="pointer-events-auto">
+                <MemberCard member={selectedMember} onClose={handleCloseCard} onPlayAudio={handlePlayAudio} />
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
