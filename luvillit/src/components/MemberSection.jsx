@@ -53,6 +53,24 @@ const MemberSection = () => {
         width="w-full"         
         height="h-auto"        
       />
+      
+      {/* Lớp mờ */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        top:'75%',
+        zIndex: 1,
+        background: `linear-gradient(
+          to bottom,
+          transparent        0%,
+          transparent        15%,
+          rgba(0,0,0,0.10)   35%,
+          rgba(0,0,0,0.50)   55%,
+          rgba(0,0,0,0.82)   75%,
+          rgba(0,0,0,0.96)   100%
+        )`,
+        pointerEvents: 'none',
+      }} />
 
       <div 
           className="absolute top-[33.2%] left-[68.2%] z-20 transform cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-30"

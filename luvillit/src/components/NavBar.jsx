@@ -100,10 +100,10 @@ const Navbar = () => {
         {/* Menu bên phải */}
         <div className="flex-1 flex items-center justify-end gap-10">
           <a href="#achievement" className="hover:text-gray-300 transition-colors duration-300">
-            Achievement
+            Features Awards
           </a>
-          <a href="#contact" className="hover:text-gray-300 transition-colors duration-300">
-            Contact
+          <a href="#albums" className="hover:text-gray-300 transition-colors duration-300">
+            Albums
           </a>
         </div>
 
