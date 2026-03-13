@@ -82,7 +82,7 @@ const Navbar = () => {
           <a href="#hero" className="hover:text-gray-300 transition-colors duration-300">
             Introduct
           </a>
-          <a href="#member" className="hover:text-gray-300 transition-colors duration-300"
+          <a href="#about" className="hover:text-gray-300 transition-colors duration-300"
             style={{ display: 'inline-flex' }}>
             {displayChars.map((ch, i) => (
               <span key={i} style={{ display: 'inline-block', width: '0.9em', textAlign: 'center' }}>
@@ -99,7 +99,7 @@ const Navbar = () => {
 
         {/* Menu bên phải */}
         <div className="flex-1 flex items-center justify-end gap-10">
-          <a href="#achievement" className="hover:text-gray-300 transition-colors duration-300">
+          <a href="#achievements" className="hover:text-gray-300 transition-colors duration-300">
             Features Awards
           </a>
           <a href="#albums" className="hover:text-gray-300 transition-colors duration-300">

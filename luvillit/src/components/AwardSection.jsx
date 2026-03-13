@@ -10,7 +10,8 @@ const LoadingIcon = () => (
 );
 
 // --- COMPONENT THẺ GIẢI THƯỞNG BENTO ---
-const AwardCard = ({ item, bentoClass }) => {
+// Nhận thêm prop 'index' để làm hiệu ứng stagger (hiện lệch nhau)
+const AwardCard = ({ item, bentoClass, index }) => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
   const videoRef = useRef(null);
@@ -24,8 +25,9 @@ const AwardCard = ({ item, bentoClass }) => {
         }
       },
       {
-        rootMargin: '150px', 
-        threshold: 0.1,
+        // Đổi rootMargin thành 0px để thẻ thực sự vào màn hình mới bắt đầu chạy animation
+        rootMargin: '0px', 
+        threshold: 0.15, // Cần hiện 15% diện tích thẻ mới kích hoạt
       }
     );
 
@@ -53,8 +55,14 @@ const AwardCard = ({ item, bentoClass }) => {
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      // Nền trong suốt (bg-transparent) 
-      className={`group relative overflow-hidden bg-transparent rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer ${bentoClass}`}
+      // Thêm class animation trượt lên và mờ dần (opacity & translate-y)
+      // Dùng isVisible để bật/tắt class
+      className={`group relative overflow-hidden bg-transparent rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer 
+      transition-all duration-700 ease-out transform
+      ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'} 
+      ${bentoClass}`}
+      // Mỗi thẻ sẽ có delay dài hơn thẻ trước 100ms
+      style={{ transitionDelay: `${index * 100}ms` }}
     >
       {/* Vùng chứa Video (bg-transparent) */}
       <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center bg-transparent">
@@ -74,7 +82,7 @@ const AwardCard = ({ item, bentoClass }) => {
         )}
       </div>
 
-      {/* Lớp phủ tối (Dark Overlay) - Giữ để chữ hover đọc được rõ */}
+      {/* Lớp phủ tối (Dark Overlay) */}
       <div className="absolute inset-0 bg-black/30 z-10 transition-colors duration-300 group-hover:bg-black/60" />
 
       {/* Thông tin hiện lên khi HOVER */}
@@ -95,23 +103,22 @@ const AwardCard = ({ item, bentoClass }) => {
 
 // --- COMPONENT CHÍNH ---
 const AwardSection = () => {
-  // Bản đồ toán học chia 24 ô grid khít khìn khịt (6 cột x 4 hàng) cho 8 video
+  // Bản đồ toán học chia grid
   const getBentoClass = (index) => {
     switch(index) {
-      case 0: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; // 2x2
-      case 1: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; // 2x2
-      case 2: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; // 1x2
-      case 3: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; // 1x2
-      case 4: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; // 4x1
-      case 5: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; // 2x1
-      case 6: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; // 4x1
-      case 7: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; // 2x1
+      case 0: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; 
+      case 1: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; 
+      case 2: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; 
+      case 3: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; 
+      case 4: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; 
+      case 5: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; 
+      case 6: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; 
+      case 7: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; 
       default: return "col-span-1 row-span-1";
     }
   };
 
   return (
-    // Xóa màu nền ở đây để nhìn thấy background của App
     <div className="bg-transparent w-full h-auto min-h-screen md:h-screen p-2 md:p-3 overflow-hidden box-border flex flex-col">
       <div className="grid grid-cols-1 md:grid-cols-6 auto-rows-[250px] md:grid-rows-4 md:auto-rows-fr gap-2 md:gap-3 h-full w-full flex-grow">
         {awards.map((item, index) => (
@@ -119,6 +126,7 @@ const AwardSection = () => {
             key={item.id} 
             item={item} 
             bentoClass={getBentoClass(index)} 
+            index={index} // Truyền index vào đây
           />
         ))}
       </div>
