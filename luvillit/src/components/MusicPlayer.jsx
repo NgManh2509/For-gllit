@@ -14,6 +14,7 @@ const playlist = [
   { src: `${import.meta.env.BASE_URL}music/track11.mp3`, name: 'little monster' },
   { src: `${import.meta.env.BASE_URL}music/track12.mp3`, name: '밤소풍' },
 ];
+
 // ── SVG Icons ──────────────────────────────────────────────
 const IconPrev = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -55,6 +56,26 @@ const IconMusic = () => (
   </svg>
 )
 
+const IconMinimize = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="4 14 10 14 10 20" />
+    <polyline points="20 10 14 10 14 4" />
+    <line x1="14" y1="10" x2="21" y2="3" />
+    <line x1="3" y1="21" x2="10" y2="14" />
+  </svg>
+)
+
+const IconMaximize = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 3 21 3 21 9" />
+    <polyline points="9 21 3 21 3 15" />
+    <line x1="21" y1="3" x2="14" y2="10" />
+    <line x1="3" y1="21" x2="10" y2="14" />
+  </svg>
+)
+
 // ── Main Component ─────────────────────────────────────────
 export default function MusicPlayer() {
   const audioRef   = useRef(null)
@@ -69,6 +90,7 @@ export default function MusicPlayer() {
   const [elapsed,      setElapsed]      = useState('0:00')
   const [duration,     setDuration]     = useState('0:00')
   const [pos,          setPos]          = useState({ x: null, y: null }) // null = not placed yet
+  const [isMinimized,  setIsMinimized]  = useState(false) // State cho tính năng thu nhỏ
 
   // ── Format time ──
   const fmt = (sec) => {
@@ -133,8 +155,6 @@ export default function MusicPlayer() {
 
       setPos(prev => {
         const { x, y } = prev
-
-        // Khoảng cách đến 4 cạnh
         const distLeft   = x
         const distRight  = W - pw - x
         const distTop    = y
@@ -221,7 +241,6 @@ export default function MusicPlayer() {
   const prevTrack = () => setCurrentIndex(i => (i - 1 + playlist.length) % playlist.length)
   const nextTrack = () => setCurrentIndex(i => (i + 1) % playlist.length)
 
-  // ── Seek by clicking progress bar ──
   const onProgressClick = (e) => {
     const bar   = progressRef.current
     if (!bar || !audioRef.current?.duration) return
@@ -230,8 +249,21 @@ export default function MusicPlayer() {
     audioRef.current.currentTime = ratio * audioRef.current.duration
   }
 
-  // ── Track display name (scroll if long) ──
   const trackName = playlist[currentIndex].name
+
+  // Glassmorphism base style dùng chung
+  const glassStyle = {
+    background: 'rgba(255,255,255,0.08)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255,255,255,0.18)',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',
+    cursor: 'grab',
+    color: '#fff',
+    fontFamily: '"Inter", system-ui, sans-serif',
+    transition: 'width 0.3s ease, padding 0.3s ease, border-radius 0.3s ease',
+    overflow: 'hidden'
+  }
 
   return (
     <>
@@ -254,109 +286,146 @@ export default function MusicPlayer() {
         }}
         className="player-widget"
       >
-        {/* Glass card */}
-        <div style={{
-          width: 260,
-          borderRadius: 20,
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.18)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',
-          padding: '14px 16px 12px',
-          cursor: 'grab',
-          color: '#fff',
-          fontFamily: '"Inter", system-ui, sans-serif',
-        }}>
-
-          {/* Top row: music note + track name + index */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-            {/* Animated music icon badge */}
-            <div style={{
-              width: 28, height: 28, borderRadius: 8,
-              background: 'linear-gradient(135deg, rgba(255,138,157,0.6), rgba(182,181,216,0.6))',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0,
-            }}>
-              <IconMusic />
-            </div>
-
-            {/* Scrolling track name */}
-            <div style={{ overflow: 'hidden', flex: 1 }}>
-              <div style={{
-                fontSize: 13,
-                fontWeight: 600,
-                whiteSpace: 'nowrap',
-                animation: trackName.length > 18 ? 'marquee 8s linear infinite' : 'none',
-                display: 'inline-block',
-              }}>
-                {trackName}
-              </div>
-              <div style={{ fontSize: 10, opacity: 0.55, marginTop: 1 }}>
-                {currentIndex + 1} / {playlist.length} · ILLIT
-              </div>
-            </div>
-          </div>
-
-          {/* Progress bar */}
-          <div
-            ref={progressRef}
-            data-progress="true"
-            onClick={onProgressClick}
-            style={{
-              height: 4,
-              borderRadius: 99,
-              background: 'rgba(255,255,255,0.15)',
-              cursor: 'pointer',
-              marginBottom: 6,
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            <div style={{
-              height: '100%',
-              borderRadius: 99,
-              width: `${progress}%`,
-              background: 'linear-gradient(90deg, #FF8A9D, #B6B5D8)',
-              transition: 'width 0.4s linear',
-            }} />
-          </div>
-
-          {/* Time */}
+        {isMinimized ? (
+          /* ── MINIMIZED VIEW (Thu nhỏ) ── */
           <div style={{
-            display: 'flex', justifyContent: 'space-between',
-            fontSize: 9, opacity: 0.5, marginBottom: 12, letterSpacing: '0.3px',
+            ...glassStyle,
+            width: 'auto',
+            borderRadius: 99,
+            padding: '8px 12px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10
           }}>
-            <span>{elapsed}</span>
-            <span>{duration}</span>
-          </div>
-
-          {/* Controls */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          }}>
-            {/* Prev */}
-            <button onClick={prevTrack} style={btnStyle}>
-              <IconPrev />
+            {/* Phóng to */}
+            <button onClick={() => setIsMinimized(false)} style={miniBtnStyle} title="Mở rộng">
+              <IconMaximize />
             </button>
 
-            {/* Play / Pause */}
+            {/* Play / Pause Mini */}
             <button onClick={togglePlay} style={{
               ...btnStyle,
-              width: 44, height: 44,
-              background: 'linear-gradient(135deg, rgba(255,138,157,0.55), rgba(182,181,216,0.55))',
-              boxShadow: '0 4px 16px rgba(255,138,157,0.3)',
+              width: 32, height: 32,
+              background: 'rgba(255, 255, 255, 0.2)',
             }}>
               {isPlaying ? <IconPause /> : <IconPlay />}
             </button>
 
-            {/* Next */}
-            <button onClick={nextTrack} style={btnStyle}>
+            {/* Next Mini */}
+            <button onClick={nextTrack} style={miniBtnStyle} title="Bài tiếp theo">
               <IconNext />
             </button>
           </div>
+        ) : (
+          /* ── FULL VIEW (Đầy đủ) ── */
+          <div style={{
+            ...glassStyle,
+            width: 260,
+            borderRadius: 20,
+            padding: '14px 16px 12px',
+            position: 'relative'
+          }}>
+            {/* Nút thu nhỏ góc trên bên phải */}
+            <button 
+              onClick={() => setIsMinimized(true)} 
+              style={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                ...miniBtnStyle
+              }}
+              title="Thu nhỏ"
+            >
+              <IconMinimize />
+            </button>
 
-        </div>
+            {/* Top row: music note + track name + index */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, paddingRight: 24 }}>
+              {/* Animated music icon badge */}
+              <div style={{
+                width: 28, height: 28, borderRadius: 8,
+                background: 'rgba(255, 255, 255, 0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                <IconMusic />
+              </div>
+
+              {/* Scrolling track name */}
+              <div style={{ overflow: 'hidden', flex: 1 }}>
+                <div style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  animation: trackName.length > 18 ? 'marquee 8s linear infinite' : 'none',
+                  display: 'inline-block',
+                }}>
+                  {trackName}
+                </div>
+                <div style={{ fontSize: 10, opacity: 0.55, marginTop: 1 }}>
+                  {currentIndex + 1} / {playlist.length} · ILLIT
+                </div>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div
+              ref={progressRef}
+              data-progress="true"
+              onClick={onProgressClick}
+              style={{
+                height: 4,
+                borderRadius: 99,
+                background: 'rgba(255,255,255,0.15)',
+                cursor: 'pointer',
+                marginBottom: 6,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              <div style={{
+                height: '100%',
+                borderRadius: 99,
+                width: `${progress}%`,
+                background: '#FFFFFF',
+                transition: 'width 0.4s linear',
+              }} />
+            </div>
+
+            {/* Time */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-between',
+              fontSize: 9, opacity: 0.5, marginBottom: 12, letterSpacing: '0.3px',
+            }}>
+              <span>{elapsed}</span>
+              <span>{duration}</span>
+            </div>
+
+            {/* Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+              {/* Prev */}
+              <button onClick={prevTrack} style={btnStyle}>
+                <IconPrev />
+              </button>
+
+              {/* Play / Pause */}
+              <button onClick={togglePlay} style={{
+                ...btnStyle,
+                width: 44, height: 44,
+                background: '#FFFFFF',
+                color: '#000000',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.2)', 
+              }}>
+                {isPlaying ? <IconPause /> : <IconPlay />}
+              </button>
+
+              {/* Next */}
+              <button onClick={nextTrack} style={btnStyle}>
+                <IconNext />
+              </button>
+            </div>
+          </div>
+        )}
 
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -381,7 +450,7 @@ export default function MusicPlayer() {
   )
 }
 
-// ── Shared button style ──
+// ── Shared styles ──
 const btnStyle = {
   width: 36,
   height: 36,
@@ -395,4 +464,13 @@ const btnStyle = {
   cursor: 'pointer',
   transition: 'transform 0.15s ease, background-color 0.15s ease',
   outline: 'none',
+}
+
+const miniBtnStyle = {
+  ...btnStyle,
+  width: 28,
+  height: 28,
+  borderRadius: 8,
+  border: 'none',
+  background: 'transparent'
 }
