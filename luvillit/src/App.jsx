@@ -4,6 +4,7 @@ import VideoBackGround from './components/VideoBackGround'
 import NavBar from './components/NavBar'
 import HeroSection from './components/HeroSection'
 import MemberSection from './components/MemberSection'
+import AwardSection from './components/AwardSection'
 
 
 function App() {
@@ -21,8 +22,10 @@ function App() {
         <section id="about">
           <MemberSection />
         </section>
-        <section id="members"></section>
-        <section id="achievements" style={{ minHeight: '100vh', background: '#000' }}></section>
+        <div className="h-4 w-full bg-transparent"></div>
+        <section id="achievements" className="w-full overflow-x-hidden block">
+          <AwardSection />
+        </section>
       </main>
 
       {/* Footer */}
