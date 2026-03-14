@@ -126,7 +126,7 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
                   <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
                   <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
                 </svg>
-                Say hello
+                Self-introduction monologue
               </button>
             </div>
           </div>
@@ -141,9 +141,23 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
               padding: '24px' 
             }}
           >
+            <h2 className="font-serif font-medium text-black mb-3" style={{ fontSize: '18px' }}>Birthday</h2>
+            <div 
+              className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar mb-3" 
+              style={{ fontSize: '15px', lineHeight: '1.6', maxHeight: '140px' }}
+            >
+              {member.birthDate}
+            </div>
+            <h2 className="font-serif font-medium text-black mb-3" style={{ fontSize: '18px' }}>Place of birth</h2>
+            <div 
+              className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar mb-3" 
+              style={{ fontSize: '15px', lineHeight: '1.6', maxHeight: '140px' }}
+            >
+              {member.homeTown}
+            </div>
             <h2 className="font-serif font-medium text-black mb-3" style={{ fontSize: '18px' }}>Bio</h2>
             <div 
-              className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar" 
+              className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar mb-3" 
               style={{ fontSize: '15px', lineHeight: '1.6', maxHeight: '140px' }}
             >
               {member.bio}

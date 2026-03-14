@@ -103,34 +103,36 @@ const AwardCard = ({ item, bentoClass, index }) => {
 
 // --- COMPONENT CHÍNH ---
 const AwardSection = () => {
-  // Bản đồ toán học chia grid
   const getBentoClass = (index) => {
     switch(index) {
-      case 0: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; 
-      case 1: return "col-span-1 row-span-1 md:col-span-2 md:row-span-2"; 
-      case 2: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; 
-      case 3: return "col-span-1 row-span-1 md:col-span-1 md:row-span-2"; 
-      case 4: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; 
-      case 5: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; 
-      case 6: return "col-span-1 row-span-1 md:col-span-4 md:row-span-1"; 
-      case 7: return "col-span-1 row-span-1 md:col-span-2 md:row-span-1"; 
-      default: return "col-span-1 row-span-1";
+      case 0: return "md:col-span-3 md:row-span-2"; 
+      case 1: return "md:col-span-3 md:row-span-1"; 
+      case 2: return "md:col-span-1 md:row-span-1"; 
+      case 3: return "md:col-span-2 md:row-span-1"; 
+      case 4: return "md:col-span-2 md:row-span-2"; 
+      case 5: return "md:col-span-4 md:row-span-1"; 
+      case 6: return "md:col-span-2 md:row-span-1"; 
+      case 7: return "md:col-span-2 md:row-span-1"; 
+      default: return "md:col-span-2 md:row-span-1";
     }
   };
 
   return (
-    <div className="bg-transparent w-full h-auto min-h-screen md:h-screen p-2 md:p-3 overflow-hidden box-border flex flex-col">
-      <div className="grid grid-cols-1 md:grid-cols-6 auto-rows-[250px] md:grid-rows-4 md:auto-rows-fr gap-2 md:gap-3 h-full w-full flex-grow">
-        {awards.map((item, index) => (
-          <AwardCard 
-            key={item.id} 
-            item={item} 
-            bentoClass={getBentoClass(index)} 
-            index={index} // Truyền index vào đây
-          />
-        ))}
+    <section className="bg-transparent w-full h-screen mt-[8px] p-2 md:p-3 overflow-hidden flex flex-col box-border">
+      <div className="w-full h-full">
+        <div className="grid grid-cols-1 md:grid-cols-6 grid-rows-[repeat(8,minmax(0,1fr))] md:grid-rows-4 gap-2 md:gap-3 w-full h-full">
+          {awards.map((item, index) => (
+            <AwardCard 
+              key={item.id} 
+              item={item} 
+              bentoClass={`${getBentoClass(index)} rounded-xl md:rounded-2xl border border-white/10`} 
+              index={index} 
+            />
+          ))}
+        </div>
+        
       </div>
-    </div>
+    </section>
   );
 };
 

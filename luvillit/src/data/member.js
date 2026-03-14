@@ -2,11 +2,11 @@
 const BASE = import.meta.env.BASE_URL;
 
 const introVoice = [
-  `${BASE}voice/irohaIntroduce.mp3`, 
-  `${BASE}voice/mokaIntro.mp3`, 
-  `${BASE}voice/minjuintro.mp3`, 
-  `${BASE}voice/yunahIntro.mp3`, 
-  `${BASE}voice/wonheeIntro.mp3`
+  `${BASE}voice/iroha.mp3`, 
+  `${BASE}voice/moka.mp3`, 
+  `${BASE}voice/minju.mp3`, 
+  `${BASE}voice/yunah.mp3`, 
+  `${BASE}voice/wonhee.mp3`
 ];
 
 const calculateAge = (birthDateStr) => {

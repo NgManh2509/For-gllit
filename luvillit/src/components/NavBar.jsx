@@ -103,7 +103,7 @@ const Navbar = () => {
             Features Awards
           </a>
           <a href="#albums" className="hover:text-gray-300 transition-colors duration-300">
-            Albums
+            Discography
           </a>
         </div>
 

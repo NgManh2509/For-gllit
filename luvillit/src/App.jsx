@@ -26,6 +26,7 @@ function App() {
         <section id="achievements" className="w-full overflow-x-hidden block">
           <AwardSection />
         </section>
+        <div className="h-4 w-full bg-transparent"></div>
       </main>
 
       {/* Footer */}
