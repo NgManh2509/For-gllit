@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import awards from '../data/awards.js'; 
 
-// --- LOADING ICON FOR LAZY LOAD ---
-const LoadingIcon = () => (
-  <svg className="animate-spin h-10 w-10 text-white/50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-  </svg>
-);
-
 // --- COMPONENT THẺ GIẢI THƯỞNG BENTO ---
-// Nhận thêm prop 'index' để làm hiệu ứng stagger (hiện lệch nhau)
 const AwardCard = ({ item, bentoClass, index }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(true); // Thêm state check mobile
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 
   useEffect(() => {
+    // Phân biệt Mobile và Desktop ngay khi load trang
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+
+    // Xử lý hiệu ứng trượt
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -24,29 +24,38 @@ const AwardCard = ({ item, bentoClass, index }) => {
           observer.disconnect(); 
         }
       },
-      {
-        // Đổi rootMargin thành 0px để thẻ thực sự vào màn hình mới bắt đầu chạy animation
-        rootMargin: '0px', 
-        threshold: 0.15, // Cần hiện 15% diện tích thẻ mới kích hoạt
-      }
+      { rootMargin: '0px', threshold: 0.15 }
     );
 
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
-
-    return () => observer.disconnect();
+    
+    return () => {
+      window.removeEventListener('resize', checkDevice);
+      observer.disconnect();
+    };
   }, []);
 
   const handleMouseEnter = () => {
-    if (videoRef.current) {
+    if (!isMobile && videoRef.current) {
       videoRef.current.play().catch(error => console.log("Video play interrupted:", error));
     }
   };
 
   const handleMouseLeave = () => {
-    if (videoRef.current) {
+    if (!isMobile && videoRef.current) {
       videoRef.current.pause(); 
+    }
+  };
+
+  const handleClick = () => {
+    if (isMobile && videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(error => console.log("Playback failed:", error));
+      } else {
+        videoRef.current.pause();
+      }
     }
   };
 
@@ -55,38 +64,32 @@ const AwardCard = ({ item, bentoClass, index }) => {
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      // Thêm class animation trượt lên và mờ dần (opacity & translate-y)
-      // Dùng isVisible để bật/tắt class
-      className={`group relative overflow-hidden bg-transparent rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer 
+      onClick={handleClick} 
+      className={`group relative overflow-hidden bg-zinc-900/80 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer 
       transition-all duration-700 ease-out transform
       ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'} 
       ${bentoClass}`}
-      // Mỗi thẻ sẽ có delay dài hơn thẻ trước 100ms
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      {/* Vùng chứa Video (bg-transparent) */}
       <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center bg-transparent">
-        {isVisible ? (
+        {isVisible && (
           <video
             ref={videoRef}
             loop
             muted
             playsInline
+            // VŨ KHÍ MỚI Ở ĐÂY: Desktop load sẵn (auto), Mobile không load (none)
+            preload={isMobile ? "none" : "auto"} 
             className="w-full h-full object-cover transition-opacity duration-500"
-            preload="metadata"
           >
             <source src={item.videoLink} type="video/mp4" />
           </video>
-        ) : (
-          <LoadingIcon />
         )}
       </div>
 
-      {/* Lớp phủ tối (Dark Overlay) */}
       <div className="absolute inset-0 bg-black/30 z-10 transition-colors duration-300 group-hover:bg-black/60" />
 
-      {/* Thông tin hiện lên khi HOVER */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-events-none">
         <span className="text-[10px] md:text-xs font-medium text-white/90 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 tracking-wider uppercase mb-2 shadow-lg">
           {item.hosting}
         </span>
@@ -101,7 +104,6 @@ const AwardCard = ({ item, bentoClass, index }) => {
   );
 };
 
-// --- COMPONENT CHÍNH ---
 const AwardSection = () => {
   const getBentoClass = (index) => {
     switch(index) {
@@ -130,7 +132,6 @@ const AwardSection = () => {
             />
           ))}
         </div>
-        
       </div>
     </section>
   );

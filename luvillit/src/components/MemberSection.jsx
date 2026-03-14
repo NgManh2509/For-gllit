@@ -56,13 +56,12 @@ const MemberSection = () => {
         height="h-auto"        
       />
       
-      <div style={{
-        position: 'absolute', inset: 0, top:'75%', zIndex: 1,
-        background: `linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(0,0,0,0.10) 35%, rgba(0,0,0,0.50) 55%, rgba(0,0,0,0.82) 75%, rgba(0,0,0,0.96) 100%)`,
-        pointerEvents: 'none',
-      }} />
-
-      {/* ─── KHUNG MẶT ĐÃ ĐƯỢC CHUẨN HÓA CÔNG THỨC ─── */}
+      <div 
+        className="absolute inset-0 top-[75%] z-[1] pointer-events-none opacity-60 md:opacity-100 transition-opacity"
+        style={{
+          background: `linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(0,0,0,0.10) 35%, rgba(0,0,0,0.50) 55%, rgba(0,0,0,0.82) 75%, rgba(0,0,0,0.96) 100%)`,
+        }} 
+      />
       
       {/* 1. Iroha: w-241 x-1133 h-217 y-764 */}
       <div 
@@ -124,9 +123,8 @@ const MemberSection = () => {
         <MemberFrame imageUrl={memberFace[4]} name="Yunah" />
       </div>
 
-      {/* ────────────────────────────────────────── */}
 
-      <div className='absolute inset-0 backdrop-blur-[1.5px] pointer-events-none' />
+      <div className='absolute inset-0 backdrop-blur-none md:backdrop-blur-[1.5px] pointer-events-none' />
 
       {/* CÁC THÀNH PHẦN TEXT BÊN TRÊN */}
       <div className="absolute top-0 left-0 w-full z-10 transform scale-[0.6] md:scale-100 origin-top transition-transform duration-300">
