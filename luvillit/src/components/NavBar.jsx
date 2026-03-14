@@ -78,7 +78,7 @@ const Navbar = () => {
       >
 
         {/* Menu bên trái */}
-        <div className="flex-1 flex items-center gap-10">
+        <div className="hidden md:flex flex-1 flex items-center gap-10">
           <a href="#hero" className="hover:text-gray-300 transition-colors duration-300">
             Introduct
           </a>
@@ -98,7 +98,7 @@ const Navbar = () => {
         </div>
 
         {/* Menu bên phải */}
-        <div className="flex-1 flex items-center justify-end gap-10">
+        <div className="hidden md:flex flex-1 flex items-center justify-end gap-10">
           <a href="#achievements" className="hover:text-gray-300 transition-colors duration-300">
             Features Awards
           </a>
