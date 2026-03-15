@@ -27,7 +27,7 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
       
       {/* Khung bao ngoài cùng */}
       <motion.div 
-        className="w-full mx-auto font-sans relative" 
+        className="w-[92vw] md:w-full mx-auto font-sans relative max-w-[680px]" 
         style={{ maxWidth: '680px' }}
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

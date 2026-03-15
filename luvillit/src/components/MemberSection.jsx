@@ -127,7 +127,7 @@ const MemberSection = () => {
       <div className='absolute inset-0 backdrop-blur-none md:backdrop-blur-[1.5px] pointer-events-none' />
 
       {/* CÁC THÀNH PHẦN TEXT BÊN TRÊN */}
-      <div className="absolute top-0 left-0 w-full z-10 transform scale-[0.6] md:scale-100 origin-top transition-transform duration-300">
+      <div className="absolute top-[0%] md:top-0 left-1/2 w-[200vw] md:w-full -translate-x-1/2 z-10 transform scale-50 md:scale-100 origin-top transition-transform duration-300">
         <CurveTextUp 
           text="ILLIT" speed={1} curveHeight={50} fontSize={64} color="#ffffff" height={200} gap={0.5} easing={0.05} direction="left" interactive={true} className="text-white"
         />

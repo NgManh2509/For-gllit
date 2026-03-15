@@ -23,7 +23,7 @@ const MemberFrame = ({
         <div 
           className="absolute bg-white flex items-center justify-center z-10"
           style={{
-            top: '-25%',                  
+            top: '-26%',                  
             right: '-2.2%',                 
             height: '25%',                
             padding: '2% 10%',            

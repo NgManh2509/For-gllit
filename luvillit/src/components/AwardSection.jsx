@@ -79,7 +79,7 @@ const AwardCard = ({ item, bentoClass, index }) => {
             muted
             playsInline
             // VŨ KHÍ MỚI Ở ĐÂY: Desktop load sẵn (auto), Mobile không load (none)
-            preload={isMobile ? "none" : "auto"} 
+            preload="metadata" 
             className="w-full h-full object-cover transition-opacity duration-500"
           >
             <source src={item.videoLink} type="video/mp4" />
