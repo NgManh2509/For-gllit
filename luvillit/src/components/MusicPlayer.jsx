@@ -1,18 +1,26 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
+const BASE = import.meta.env.BASE_URL
 const playlist = [
-  { src: `${import.meta.env.BASE_URL}music/track1.mp3`,  name: 'Not me' },
-  { src: `${import.meta.env.BASE_URL}music/track2.mp3`,  name: 'Not cute anymore' },
-  { src: `${import.meta.env.BASE_URL}music/track3.mp3`,  name: 'Tick-Tack' },
-  { src: `${import.meta.env.BASE_URL}music/track4.mp3`,  name: 'Iykyk' },
-  { src: `${import.meta.env.BASE_URL}music/track5.mp3`,  name: 'Pimple' },
-  { src: `${import.meta.env.BASE_URL}music/track6.mp3`,  name: 'oops' },
-  { src: `${import.meta.env.BASE_URL}music/track7.mp3`,  name: 'jellyous' },
-  { src: `${import.meta.env.BASE_URL}music/track8.mp3`,  name: 'I’ll Like You' },
-  { src: `${import.meta.env.BASE_URL}music/track9.mp3`,  name: 'Cherish (My Love)' },
-  { src: `${import.meta.env.BASE_URL}music/track10.mp3`, name: 'Do the dance' },
-  { src: `${import.meta.env.BASE_URL}music/track11.mp3`, name: 'little monster' },
-  { src: `${import.meta.env.BASE_URL}music/track12.mp3`, name: '밤소풍' },
+  { src: `${BASE}music/track1.mp3`,  name: 'Not me' },
+  { src: `${BASE}music/track2.mp3`,  name: 'Not cute anymore' },
+  { src: `${BASE}music/track3.mp3`,  name: 'Tick-Tack' },
+  { src: `${BASE}music/track4.mp3`,  name: 'Iykyk' },
+  { src: `${BASE}music/track5.mp3`,  name: 'Pimple' },
+  { src: `${BASE}music/track6.mp3`,  name: 'oops' },
+  { src: `${BASE}music/track7.mp3`,  name: 'jellyous' },
+  { src: `${BASE}music/track8.mp3`,  name: 'I’ll Like You' },
+  { src: `${BASE}music/track9.mp3`,  name: 'Cherish (My Love)' },
+  { src: `${BASE}music/track10.mp3`, name: 'Do the dance' },
+  { src: `${BASE}music/track11.mp3`, name: 'little monster' },
+  { src: `${BASE}music/track12.mp3`, name: '밤소풍' },
+  { src: `${BASE}music/track13.mp3`, name: '만찬가 晩餐歌 - tuki. Covered by MOKA' },
+  { src: `${BASE}music/track14.mp3`, name: 'Toki Yo Tomare' },
+  { src: `${BASE}music/track15.mp3`, name: 'BIRDS OF A FEATHER ( Minju ft. John Park )' },
+  { src: `${BASE}music/track16.mp3`, name: 'Love Love Love ( Minju ft. John Park)' },
+  { src: `${BASE}music/track17.mp3`, name: 'Almond Chocolate' },
+  { src: `${BASE}music/track18.mp3`, name: 'Lucky Girl Syndrome' },
+  { src: `${BASE}music/track19.mp3`, name: 'Magnetic' },
 ];
 
 // ── SVG Icons ──────────────────────────────────────────────
@@ -76,6 +84,17 @@ const IconMaximize = () => (
   </svg>
 )
 
+const IconGrip = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.5 }}>
+    <circle cx="9" cy="5" r="2" />
+    <circle cx="15" cy="5" r="2" />
+    <circle cx="9" cy="12" r="2" />
+    <circle cx="15" cy="12" r="2" />
+    <circle cx="9" cy="19" r="2" />
+    <circle cx="15" cy="19" r="2" />
+  </svg>
+)
+
 // ── Main Component ─────────────────────────────────────────
 export default function MusicPlayer() {
   const audioRef   = useRef(null)
@@ -110,6 +129,26 @@ export default function MusicPlayer() {
       })
     }
   }, [pos.x])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPos((prev) => {
+        if(prev.x === null || prev.y === null || !playerRef.current) return
+        const el = playerRef.current
+        const PAD = 12
+
+        const maxW = window.innerWidth - el.offsetWidth - PAD
+        const maxH = window.innerHeight - el.offsetHeight - PAD
+
+        return {
+          x: clamp(prev.x, PAD, maxW),
+          y: clamp(prev.y, PAD, maxH),
+        }
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // ── Clamp helper ──
   const clamp = useCallback((val, min, max) => Math.min(Math.max(val, min), max), [])
@@ -292,11 +331,24 @@ export default function MusicPlayer() {
             ...glassStyle,
             width: 'auto',
             borderRadius: 99,
-            padding: '8px 12px',
+            padding: '8px 12px 8px 6px', // Giảm padding trái một chút để icon 6 chấm tràn ra
             display: 'flex',
             alignItems: 'center',
             gap: 10
           }}>
+            {/* ── Biểu tượng 6 chấm để báo hiệu Drag ── */}
+            <div 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                padding: '4px',
+                cursor: 'grab' 
+              }}
+              title="Kéo để di chuyển"
+            >
+              <IconGrip />
+            </div>
+
             {/* Phóng to */}
             <button onClick={() => setIsMinimized(false)} style={miniBtnStyle} title="Mở rộng">
               <IconMaximize />
