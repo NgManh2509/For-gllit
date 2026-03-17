@@ -34,7 +34,6 @@ function App() {
         <div className="h-4 w-full bg-transparent"></div>
       </main>
 
-      {/* Footer */}
       <MusicPlayer />
     </>
   )
