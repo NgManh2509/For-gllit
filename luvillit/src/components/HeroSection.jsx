@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TextHighlighter } from '../supports/textHighlighter'
-import ThreeDCard from '../supports/ThreeDCard'
+
 
 const tracks = [
   { num: '01', title: 'MY WORLD',            highlight: false, align: 'left'   },

@@ -7,10 +7,8 @@ const MemberFrame = ({
   className = "" 
 }) => {
   return (
-    // Dùng w-full h-full để lấp đầy 100% tỷ lệ được giao từ MemberSection
     <div className={`relative inline-block w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] ${className}`}>
       
-      {/* Khung viền mỏng dần trên mobile để bớt thô */}
       <div className="relative w-full h-full border-[clamp(1px,0.2vw,3px)] border-white box-border bg-black">
         
         <img 
@@ -18,25 +16,20 @@ const MemberFrame = ({
           alt={name} 
           className="w-full h-full object-cover block"
         />
-
-        {/* Thẻ tên dùng % để tự di chuyển theo khung */}
         <div 
-          className="absolute bg-white flex items-center justify-center z-10"
-          style={{
-            top: '-26%',                  
-            right: '-2.2%',                 
-            height: '25%',                
-            padding: '2% 10%',            
-            minHeight: '16px',            
-          }}
+          className="absolute bg-white flex items-center justify-center z-10
+                     -top-3 -right-[2.5px] px-3 py-1.5
+                     sm:-top-4 sm:-right-2 sm:px-4 sm:py-2 
+                     md:-top-6.5 md:-right-[3.2px] md:px-5 md:py-2.5"
         >
           <span 
             className="text-black"
             style={{ 
               fontFamily: "'Pixelify Sans', sans-serif", 
-              fontSize: 'clamp(8px, 1.5vw, 24px)', 
+              // Tăng min-size lên 12px để đảm bảo luôn đọc được trên mobile
+              fontSize: 'clamp(12px, 2.5vw, 24px)', 
               lineHeight: '1',
-              transform: 'translateY(10%)' 
+              transform: 'translateY(10%)' // Giữ nguyên để canh giữa quang học cho pixel font
             }}
           >
             {name}

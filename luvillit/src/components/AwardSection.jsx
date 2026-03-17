@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import awards from '../data/awards.js'; 
-
-// --- COMPONENT THẺ GIẢI THƯỞNG BENTO ---
 const AwardCard = ({ item, bentoClass, index }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(true); // Thêm state check mobile
+  const [isMobile, setIsMobile] = useState(true); 
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 

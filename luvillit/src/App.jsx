@@ -5,6 +5,7 @@ import NavBar from './components/NavBar'
 import HeroSection from './components/HeroSection'
 import MemberSection from './components/MemberSection'
 import AwardSection from './components/AwardSection'
+import DiscographySection from './components/DiscographySection'
 
 
 function App() {
@@ -25,6 +26,10 @@ function App() {
         <div className="h-4 w-full bg-transparent"></div>
         <section id="achievements" className="w-full overflow-x-hidden block">
           <AwardSection />
+        </section>
+        <div className="h-4 w-full bg-transparent"></div>
+        <section id="discography" className="w-full overflow-x-hidden block">
+          <DiscographySection />
         </section>
         <div className="h-4 w-full bg-transparent"></div>
       </main>
