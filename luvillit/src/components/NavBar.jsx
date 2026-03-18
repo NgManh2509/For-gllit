@@ -90,6 +90,9 @@ const Navbar = () => {
               </span>
             ))}
           </a>
+          <a href="#discography" className="hover:text-gray-300 transition-colors duration-300">
+            Discography
+          </a>
         </div>
 
         {/* Logo giữa */}
@@ -102,8 +105,11 @@ const Navbar = () => {
           <a href="#achievements" className="hover:text-gray-300 transition-colors duration-300">
             Features Awards
           </a>
-          <a href="#discography" className="hover:text-gray-300 transition-colors duration-300">
-            Discography
+          <a href="#gallery" className="hover:text-gray-300 transition-colors duration-300">
+            Gallery
+          </a>
+          <a href="#stages" className="hover:text-gray-300 transition-colors duration-300">
+            Stages
           </a>
         </div>
 

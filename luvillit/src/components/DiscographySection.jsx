@@ -164,10 +164,10 @@ const DiscographySection = () => {
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                    <div className="absolute md:inset-0 md:flex md:flex-col md:items-center md:justify-center md:p-4 max-md:bottom-0 max-md:right-0 max-md:p-0 max-md:m-0 max-md:translate-x-2 max-md:translate-y-2 flex flex-col items-end md:items-center">
                     <span className="text-gray-300 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-1">
-                      ILLIT Album
+                      4th Mini Album
                     </span>
                     <span className="text-white text-2xl font-bold font-serif">
-                      it's ME 
+                      MAMIHLAPINATAPA
                     </span>
                   </div>
                 </div>

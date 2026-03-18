@@ -1,19 +1,41 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const MemberCard = ({ member, onClose, onPlayAudio }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
 
   const handleNextImage = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === member.image.length - 1 ? 0 : prev + 1));
   };
 
   const handlePrevImage = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === 0 ? member.image.length - 1 : prev - 1));
   };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > 50) {
+      handleNextImage(); /* vuốt trái sang ảnh tiếp theo */
+    } else if (distance < -50) {
+      handlePrevImage(); /* vuốt phải về ảnh trước */
+    }
+  };
+
 
   if (!member) return null;
 
@@ -74,7 +96,13 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
           <div className="flex items-center" style={{ gap: '24px', marginTop: '12px' }}>
             
             {/* Khung Ảnh */}
-            <div className="flex-shrink-0 relative group" style={{ width: '140px', height: '140px' }}>
+            <div 
+              className="flex-shrink-0 relative group" 
+              style={{ width: '140px', height: '140px', touchAction: 'pan-y' }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <img
                 src={member.image[currentImageIndex]}
                 alt={member.stageName}

@@ -269,6 +269,37 @@ export default function MusicPlayer() {
     }
   }, [])
 
+  // ── Global Voice Play/Stop Sync ──
+  const isPlayingRef = useRef(isPlaying)
+  useEffect(() => {
+    isPlayingRef.current = isPlaying
+  }, [isPlaying])
+
+  const wasPlayingRef = useRef(false)
+
+  useEffect(() => {
+    const handleVoicePlay = () => {
+      wasPlayingRef.current = isPlayingRef.current
+      if (audioRef.current && isPlayingRef.current) {
+        audioRef.current.pause()
+        setIsPlaying(false)
+      }
+    }
+    const handleVoiceStop = () => {
+      if (audioRef.current && wasPlayingRef.current) {
+        audioRef.current.play().catch(() => {})
+        setIsPlaying(true)
+      }
+    }
+
+    window.addEventListener('voicePlay', handleVoicePlay)
+    window.addEventListener('voiceStop', handleVoiceStop)
+    return () => {
+      window.removeEventListener('voicePlay', handleVoicePlay)
+      window.removeEventListener('voiceStop', handleVoiceStop)
+    }
+  }, [])
+
   // ── Controls ──
   const togglePlay = () => {
     const audio = audioRef.current

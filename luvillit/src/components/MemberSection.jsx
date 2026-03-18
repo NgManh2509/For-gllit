@@ -27,6 +27,7 @@ const MemberSection = () => {
     setSelectedMember(null);
     if(audioRef.current) {
       audioRef.current.pause();
+      window.dispatchEvent(new Event('voiceStop'));
     }
   }
 
@@ -35,7 +36,11 @@ const MemberSection = () => {
       audioRef.current.pause();
     }
     audioRef.current = new Audio(audioPath);
+    window.dispatchEvent(new Event('voicePlay'));
     audioRef.current.play();
+    audioRef.current.onended = () => {
+      window.dispatchEvent(new Event('voiceStop'));
+    };
   };
 
   return (
