@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 export default function TextReveal() {
-  const textToAnimate = "This is an unofficial fan-made project. All rights to ILLIT, images, audio, and related properties belong to BELIFT LAB and HYBE.";
+  const textToAnimate = "Created with love by a GLLIT, this website is a strictly non-profit fan project made to celebrate and promote ILLIT. We do not generate any revenue or commercialize their fame in any way. All rights to the music, images, videos, and brand belong exclusively to ILLIT and BELIFT LAB. Please support the girls by streaming their official releases!";
   const words = textToAnimate.match(/[\p{L}\p{N}]+[^\s\p{L}\p{N}]?|[^\s]/gu) || [];
   const containerVariants = {
     hidden: {
@@ -34,7 +34,7 @@ export default function TextReveal() {
       display: "flex",
       flexWrap: "wrap",
       justifyContent: 'center'
-    }} variants={containerVariants} initial="hidden" animate="visible" className="text-2xl font-bold text-center mask-r-from-0.5 max-w-5xl leading-relaxed">
+    }} variants={containerVariants} initial="hidden" animate="visible" className="text-2xl font-bold text-center max-w-5xl leading-relaxed">
         {words.map((word, index) => <motion.span key={index} variants={childVariants} transition={{
         duration: 0.8,
         ease: [0.25, 0.46, 0.45, 0.94]

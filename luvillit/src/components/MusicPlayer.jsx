@@ -21,6 +21,7 @@ const playlist = [
   { src: `${BASE}music/track17.mp3`, name: 'Almond Chocolate' },
   { src: `${BASE}music/track18.mp3`, name: 'Lucky Girl Syndrome' },
   { src: `${BASE}music/track19.mp3`, name: 'Magnetic' },
+  { src: `${BASE}music/track20.mp3`, name: 'Desperate' },
 ];
 
 // ── SVG Icons ──────────────────────────────────────────────
@@ -133,7 +134,7 @@ export default function MusicPlayer() {
   useEffect(() => {
     const handleResize = () => {
       setPos((prev) => {
-        if(prev.x === null || prev.y === null || !playerRef.current) return
+        if(prev.x === null || prev.y === null || !playerRef.current) return prev
         const el = playerRef.current
         const PAD = 12
 
@@ -182,38 +183,56 @@ export default function MusicPlayer() {
     setPos({ x: nx, y: ny })
   }, [clamp])
 
+  const snapToEdge = useCallback(() => {
+    const el = playerRef.current
+    if (!el) return
+    const W       = window.innerWidth
+    const H       = window.innerHeight
+    const pw      = el.offsetWidth
+    const ph      = el.offsetHeight
+    const PAD     = 12
+
+    setPos(prev => {
+      const { x, y } = prev
+      if (x === null || y === null) return prev
+      const distLeft   = x
+      const distRight  = W - pw - x
+      const distTop    = y
+      const distBottom = H - ph - y
+
+      const minDist = Math.min(distLeft, distRight, distTop, distBottom)
+
+      if (minDist === distLeft)   return { x: PAD,          y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+      if (minDist === distRight)  return { x: W - pw - PAD, y: Math.min(Math.max(y, PAD), H - ph - PAD) }
+      if (minDist === distTop)    return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: PAD }
+      /* distBottom */            return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: H - ph - PAD }
+    })
+
+    el.style.transition = 'left 0.3s cubic-bezier(0.25,0.46,0.45,0.94), top 0.3s cubic-bezier(0.25,0.46,0.45,0.94)'
+    setTimeout(() => { if (el) el.style.transition = '' }, 350)
+  }, [])
+
   const onPointerUp = useCallback(() => {
     dragState.current.dragging = false
+    snapToEdge()
     const el = playerRef.current
-    if (el) {
-      const W       = window.innerWidth
-      const H       = window.innerHeight
-      const pw      = el.offsetWidth
-      const ph      = el.offsetHeight
-      const PAD     = 12
-
-      setPos(prev => {
-        const { x, y } = prev
-        const distLeft   = x
-        const distRight  = W - pw - x
-        const distTop    = y
-        const distBottom = H - ph - y
-
-        const minDist = Math.min(distLeft, distRight, distTop, distBottom)
-
-        if (minDist === distLeft)   return { x: PAD,          y: Math.min(Math.max(y, PAD), H - ph - PAD) }
-        if (minDist === distRight)  return { x: W - pw - PAD, y: Math.min(Math.max(y, PAD), H - ph - PAD) }
-        if (minDist === distTop)    return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: PAD }
-        /* distBottom */            return { x: Math.min(Math.max(x, PAD), W - pw - PAD), y: H - ph - PAD }
-      })
-
-      el.style.transition = 'left 0.3s cubic-bezier(0.25,0.46,0.45,0.94), top 0.3s cubic-bezier(0.25,0.46,0.45,0.94)'
-      setTimeout(() => { if (el) el.style.transition = '' }, 350)
-      el.style.cursor = ''
-    }
+    if (el) el.style.cursor = ''
     window.removeEventListener('pointermove', onPointerMove)
     window.removeEventListener('pointerup',   onPointerUp)
-  }, [onPointerMove])
+  }, [onPointerMove, snapToEdge])
+
+  // ── Snap to edge when minimized/maximized ──
+  const initialMount = useRef(true)
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false
+      return
+    }
+    const timer = setTimeout(() => {
+      snapToEdge()
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [isMinimized, snapToEdge])
 
   // ── Start on first user interaction ──
   useEffect(() => {
