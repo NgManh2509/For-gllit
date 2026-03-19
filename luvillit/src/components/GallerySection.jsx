@@ -3,18 +3,15 @@ import React, { useEffect, useRef } from 'react';
 // =========================================================
 // --- 0. CẤU HÌNH & DỮ LIỆU ---
 // =========================================================
-const SLOT_WIDTH = 360;         
-const ITEM_WIDTH = 320;
 const POOL_SIZE = 14;           
 const TICK_SPACING = 16;        
 const VIRTUAL_TICKS_COUNT = 150; 
 const BASE = import.meta.env.BASE_URL;
 
 const galleryData = Array.from({ length: 42 }, (_, i) => {
-  // Trả về thêm num để dùng cho dòng chữ ILLIT Illustration
   return { 
     type: 'image', 
-    src: `${BASE}/galleryCollection/anh (${i+1}).jpg`,
+    src: `${BASE}/galleryCollection/illit (${i+1}).jpg`,
     num: i + 1 
   };
 });
@@ -46,7 +43,7 @@ export default function GallerySection() {
     let mouseX = 0;
     let reqId;
 
-    // --- HÀM RENDER NỘI DUNG (THÊM LẠI HOVER TEXT) ---
+    // --- HÀM RENDER NỘI DUNG ---
     const setNodeContent = (node, data) => {
       node.innerHTML = ''; 
       if (data.type === 'image') {
@@ -54,25 +51,24 @@ export default function GallerySection() {
         wrapper.className = "flex flex-col items-center justify-center w-full h-full group cursor-pointer";
 
         const imgContainer = document.createElement('div');
-        imgContainer.className = "w-full overflow-hidden transition-transform duration-300";
-        // Bỏ scale-110 (zoom) theo yêu cầu
+        // Chiều cao ảnh sẽ linh hoạt, nhưng không vượt qua container
+        imgContainer.className = "w-full overflow-hidden flex justify-center items-center h-[90%]";
         
         const img = document.createElement('img');
         img.src = data.src;
         img.alt = "Gallery";
-        img.className = "w-full h-auto object-contain pointer-events-none"; 
+        // object-contain ĐẢM BẢO TỈ LỆ ẢNH ĐƯỢC GIỮ NGUYÊN (Không bị méo hay cắt)
+        img.className = "w-full h-full object-contain pointer-events-none"; 
         
         imgContainer.appendChild(img);
         wrapper.appendChild(imgContainer);
 
-        // Text ở bên dưới, trượt xuống khi hover
         const textWrapper = document.createElement('div');
-        // Dồn hết chiều ngang và căn text sang phải
-        textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end";
+        textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end h-[10%]";
         
         const textInfo = document.createElement('div');
-        // Đổi màu text thành trắng
-        textInfo.className = "text-white text-xs font-medium tracking-[0.2em] uppercase transform -translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
+        // FIX RESPONSIVE HOVER: Mobile luôn hiện chữ. Desktop ẩn đi và trượt lên khi hover
+        textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase transform translate-y-0 md:-translate-y-4 opacity-100 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
         textInfo.innerText = `ILLIT Illustration #${data.num}`;
         
         textWrapper.appendChild(textInfo);
@@ -80,10 +76,11 @@ export default function GallerySection() {
 
         node.appendChild(wrapper);
       } else {
-        node.innerHTML = `<div class="w-full h-full flex items-center justify-center text-[3rem] font-black text-center bg-[#1d4ed8] text-white pointer-events-none leading-none">${data.content}</div>`;
+        node.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl md:text-[3rem] font-black text-center bg-[#1d4ed8] text-white pointer-events-none leading-none">${data.content}</div>`;
       }
     };
 
+    // --- CÁC SỰ KIỆN KÉO THẢ ---
     const startDrag = (e) => {
       isDragging = true;
       startX = (e.pageX || e.touches?.[0].pageX) - targetTranslate;
@@ -95,6 +92,7 @@ export default function GallerySection() {
     };
     const endDrag = () => { isDragging = false; };
 
+    // Hỗ trợ mượt mà trên Mobile Touch Events
     window.addEventListener("mousedown", startDrag);
     window.addEventListener("mousemove", onDrag);
     window.addEventListener("mouseup", endDrag);
@@ -128,9 +126,14 @@ export default function GallerySection() {
       if (skewX < -maxSkew) skewX = -maxSkew;
       if (Math.abs(velocity) < 0.05) skewX = 0;
 
+      // DYNAMIC RESPONSIVE JS: Lấy kích thước khe trượt dựa trên thiết bị thực tế
+      const isMobile = window.innerWidth < 768;
+      const currentItemW = isMobile ? 260 : 320; 
+      const currentSlotW = isMobile ? 290 : 360; // 260 width + 30 gap trên mobile
+
       // --- CẬP NHẬT GALLERY ---
       const wrapperW = galleryWrapper.clientWidth;
-      const centerSlot = Math.round(-currentTranslate / SLOT_WIDTH);
+      const centerSlot = Math.round(-currentTranslate / currentSlotW);
       const startSlot = centerSlot - Math.floor(POOL_SIZE / 2);
 
       poolRefs.current.forEach((node, i) => {
@@ -143,11 +146,11 @@ export default function GallerySection() {
           setNodeContent(node, galleryData[dataIndex]);
         }
 
-        const x = wrapperW / 2 + currentTranslate + slotIndex * SLOT_WIDTH - ITEM_WIDTH / 2;
+        const x = wrapperW / 2 + currentTranslate + slotIndex * currentSlotW - currentItemW / 2;
         node.style.transform = `translateX(${x}px) skewX(${skewX}deg)`;
       });
 
-      // --- CẬP NHẬT TIMELINE (GIỮ NGUYÊN) ---
+      // --- CẬP NHẬT TIMELINE ---
       timelineTrack.style.transform = `translateX(${currentTranslate}px)`;
       const exactCenterIndex = -currentTranslate / TICK_SPACING;
 
@@ -209,38 +212,38 @@ export default function GallerySection() {
   }, []); 
 
   return (
-    // Thay justify-between bằng justify-center và thêm gap-10 để các phần cách nhau rộng hơn
-    <div className="relative flex flex-col h-screen justify-center gap-10 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit">
+    // Responsive khoảng cách khối: gap-6 cho mobile, gap-10 cho Desktop
+    <div className="relative flex flex-col h-screen justify-center gap-6 md:gap-10 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit">
       
-      {/* --- HỌA TIẾT NỀN (KHÔNG DÍNH VIỀN) --- */}
-      <div className="absolute top-[15%] left-[10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[85px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[15%] w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* --- HỌA TIẾT NỀN RESPONSIVE --- */}
+      <div className="absolute top-[10%] md:top-[15%] left-[5%] md:left-[10%] w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-blue-500/10 rounded-full blur-[60px] md:blur-[85px] pointer-events-none" />
+      <div className="absolute bottom-[15%] md:bottom-[20%] right-[10%] md:right-[15%] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-purple-500/10 rounded-full blur-[70px] md:blur-[100px] pointer-events-none" />
 
-      {/* HEADER */}
-      {/* pt-10 pb-5 đổi thành pt-4 pb-0, vì đã có gap-6 lo phần khoảng cách */}
-      <div className="text-center pt-4 pointer-events-none z-10 w-full shrink-0">
-        <h1 className="text-[4.5rem] font-noto font-bold text-white tracking-[0.2em] leading-[0.9] m-0 uppercase">
+      {/* HEADER RESPONSIVE */}
+      <div className="text-center pt-2 md:pt-4 pointer-events-none z-10 w-full shrink-0">
+        <h1 className="text-4xl md:text-[4.5rem] font-noto font-bold text-white tracking-[0.1em] md:tracking-[0.2em] leading-tight md:leading-[0.9] m-0 uppercase">
           GALLERY 
         </h1>
       </div>
 
-      {/* GALLERY */}
-      {/* Sửa grow thành h-[500px] (cố định tạm) hoặc shrink-0 để không bị giãn hết cỡ, ép các component lại gần */}
-      <div className="relative overflow-hidden z-10 h-[500px] w-full shrink-0" id="gallery-wrapper" ref={galleryWrapperRef}>
+      {/* GALLERY CONTAINER RESPONSIVE */}
+      {/* h-[360px] cho mobile, h-[500px] cho Desktop */}
+      <div className="relative overflow-hidden z-10 h-[360px] md:h-[500px] w-full shrink-0" id="gallery-wrapper" ref={galleryWrapperRef}>
         <div className="absolute inset-0 will-change-transform [perspective:1200px] [transform-style:preserve-3d]">
           {Array.from({ length: POOL_SIZE }).map((_, i) => (
             <div
               key={i}
-              className="absolute top-1/2 -translate-y-1/2 w-[320px] h-[420px] will-change-transform overflow-hidden"
+              // Item width & height responsive: khớp với config trong Javascript JS
+              className="absolute top-1/2 -translate-y-1/2 w-[260px] md:w-[320px] h-[340px] md:h-[420px] will-change-transform overflow-hidden"
               ref={(el) => (poolRefs.current[i] = el)}
             />
           ))}
         </div>
       </div>
 
-      {/* TIMELINE (GIỮ NGUYÊN) */}
+      {/* TIMELINE (GIỮ NGUYÊN CSS INLINE & FIX) */}
       <div 
-        className="relative w-full px-[5vw] h-[120px] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0" 
+        className="relative w-full px-[5vw] h-[80px] md:h-[120px] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0" 
         ref={timelineContainerRef}
       >
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 w-[2px] h-[60px] bg-white -translate-x-1/2 z-10 pointer-events-none"></div>
