@@ -18,6 +18,7 @@ const galleryData = Array.from({ length: 42 }, (_, i) => {
 const DATA_LEN = galleryData.length;
 
 export default function GallerySection() {
+  const containerRef = useRef(null); // Ref mới cho vùng chứa tổng
   const galleryWrapperRef = useRef(null);
   const timelineTrackRef = useRef(null);
   const timelineContainerRef = useRef(null);
@@ -27,11 +28,12 @@ export default function GallerySection() {
   const tickRefs = useRef([]);
 
   useEffect(() => {
+    const mainContainer = containerRef.current;
     const galleryWrapper = galleryWrapperRef.current;
     const timelineTrack = timelineTrackRef.current;
     const timelineContainer = timelineContainerRef.current;
 
-    if (!galleryWrapper || !timelineTrack || !timelineContainer) return;
+    if (!mainContainer || !galleryWrapper || !timelineTrack || !timelineContainer) return;
 
     let isDragging = false;
     let startX = 0;
@@ -42,6 +44,9 @@ export default function GallerySection() {
     let isHoveringTimeline = false;
     let mouseX = 0;
     let reqId;
+    
+    // Biến lưu thời gian tương tác cuối để Auto-scroll
+    let lastInteractionTime = Date.now();
 
     // --- HÀM RENDER NỘI DUNG ---
     const setNodeContent = (node, data) => {
@@ -51,13 +56,11 @@ export default function GallerySection() {
         wrapper.className = "flex flex-col items-center justify-center w-full h-full group cursor-pointer";
 
         const imgContainer = document.createElement('div');
-        // Chiều cao ảnh sẽ linh hoạt, nhưng không vượt qua container
         imgContainer.className = "w-full overflow-hidden flex justify-center items-center h-[90%]";
         
         const img = document.createElement('img');
         img.src = data.src;
         img.alt = "Gallery";
-        // object-contain ĐẢM BẢO TỈ LỆ ẢNH ĐƯỢC GIỮ NGUYÊN (Không bị méo hay cắt)
         img.className = "w-full h-full object-contain pointer-events-none"; 
         
         imgContainer.appendChild(img);
@@ -67,7 +70,6 @@ export default function GallerySection() {
         textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end h-[10%]";
         
         const textInfo = document.createElement('div');
-        // FIX RESPONSIVE HOVER: Mobile luôn hiện chữ. Desktop ẩn đi và trượt lên khi hover
         textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase transform translate-y-0 md:-translate-y-4 opacity-100 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
         textInfo.innerText = `ILLIT Illustration #${data.num}`;
         
@@ -80,30 +82,35 @@ export default function GallerySection() {
       }
     };
 
-    // --- CÁC SỰ KIỆN KÉO THẢ ---
+    // --- CÁC SỰ KIỆN KÉO THẢ VÀ CUỘN ---
     const startDrag = (e) => {
       isDragging = true;
       startX = (e.pageX || e.touches?.[0].pageX) - targetTranslate;
+      lastInteractionTime = Date.now();
     };
     const onDrag = (e) => {
       if (!isDragging) return;
       const x = e.pageX || e.touches?.[0].pageX;
       targetTranslate = x - startX;
+      lastInteractionTime = Date.now();
     };
-    const endDrag = () => { isDragging = false; };
+    const endDrag = () => { 
+      isDragging = false; 
+    };
 
-    // Hỗ trợ mượt mà trên Mobile Touch Events
     window.addEventListener("mousedown", startDrag);
     window.addEventListener("mousemove", onDrag);
     window.addEventListener("mouseup", endDrag);
     window.addEventListener("touchstart", startDrag, { passive: false });
     window.addEventListener("touchmove", onDrag, { passive: false });
     window.addEventListener("touchend", endDrag);
+ 
 
     const onTimelineMouseMove = (e) => {
       isHoveringTimeline = true;
       const rect = timelineContainer.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
+      lastInteractionTime = Date.now();
     };
     const onTimelineMouseLeave = () => {
       isHoveringTimeline = false;
@@ -117,6 +124,13 @@ export default function GallerySection() {
     const maxSkew = 15;       
 
     const render = () => {
+      const isMobile = window.innerWidth < 768;
+
+      // LOGIC AUTO-SCROLL CHO MOBILE (Tự chạy nếu thả tay > 1 giây)
+      if (isMobile && !isDragging && (Date.now() - lastInteractionTime > 1000)) {
+        targetTranslate -= 0.8; // Tốc độ tự cuộn trôi về bên trái
+      }
+
       currentTranslate += (targetTranslate - currentTranslate) * ease;
       const velocity = currentTranslate - prevTranslate;
       prevTranslate = currentTranslate;
@@ -126,10 +140,8 @@ export default function GallerySection() {
       if (skewX < -maxSkew) skewX = -maxSkew;
       if (Math.abs(velocity) < 0.05) skewX = 0;
 
-      // DYNAMIC RESPONSIVE JS: Lấy kích thước khe trượt dựa trên thiết bị thực tế
-      const isMobile = window.innerWidth < 768;
       const currentItemW = isMobile ? 260 : 320; 
-      const currentSlotW = isMobile ? 290 : 360; // 260 width + 30 gap trên mobile
+      const currentSlotW = isMobile ? 290 : 360; 
 
       // --- CẬP NHẬT GALLERY ---
       const wrapperW = galleryWrapper.clientWidth;
@@ -212,28 +224,28 @@ export default function GallerySection() {
   }, []); 
 
   return (
-    // Responsive khoảng cách khối: gap-6 cho mobile, gap-10 cho Desktop
-    <div className="relative flex flex-col h-screen justify-center gap-6 md:gap-10 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit">
+    <div 
+      ref={containerRef}
+      className="relative flex flex-col h-screen justify-center gap-6 md:gap-10 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit"
+    >
       
       {/* --- HỌA TIẾT NỀN RESPONSIVE --- */}
       <div className="absolute top-[10%] md:top-[15%] left-[5%] md:left-[10%] w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-blue-500/10 rounded-full blur-[60px] md:blur-[85px] pointer-events-none" />
       <div className="absolute bottom-[15%] md:bottom-[20%] right-[10%] md:right-[15%] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-purple-500/10 rounded-full blur-[70px] md:blur-[100px] pointer-events-none" />
 
-      {/* HEADER RESPONSIVE */}
-      <div className="text-center pt-2 md:pt-4 pointer-events-none z-10 w-full shrink-0">
+      {/* HEADER RESPONSIVE (Đã thêm -mt-[10px] và bỏ pt để kéo cao hơn) */}
+      <div className="text-center -mt-[10px] md:pt-2 pointer-events-none z-10 w-full shrink-0">
         <h1 className="text-4xl md:text-[4.5rem] font-noto font-bold text-white tracking-[0.1em] md:tracking-[0.2em] leading-tight md:leading-[0.9] m-0 uppercase">
           GALLERY 
         </h1>
       </div>
 
       {/* GALLERY CONTAINER RESPONSIVE */}
-      {/* h-[360px] cho mobile, h-[500px] cho Desktop */}
       <div className="relative overflow-hidden z-10 h-[360px] md:h-[500px] w-full shrink-0" id="gallery-wrapper" ref={galleryWrapperRef}>
         <div className="absolute inset-0 will-change-transform [perspective:1200px] [transform-style:preserve-3d]">
           {Array.from({ length: POOL_SIZE }).map((_, i) => (
             <div
               key={i}
-              // Item width & height responsive: khớp với config trong Javascript JS
               className="absolute top-1/2 -translate-y-1/2 w-[260px] md:w-[320px] h-[340px] md:h-[420px] will-change-transform overflow-hidden"
               ref={(el) => (poolRefs.current[i] = el)}
             />
@@ -241,7 +253,7 @@ export default function GallerySection() {
         </div>
       </div>
 
-      {/* TIMELINE (GIỮ NGUYÊN CSS INLINE & FIX) */}
+      {/* TIMELINE */}
       <div 
         className="relative w-full px-[5vw] h-[80px] md:h-[120px] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0" 
         ref={timelineContainerRef}
