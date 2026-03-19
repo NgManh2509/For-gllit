@@ -6,6 +6,7 @@ import HeroSection from './components/HeroSection'
 import MemberSection from './components/MemberSection'
 import AwardSection from './components/AwardSection'
 import DiscographySection from './components/DiscographySection'
+import GallerySection from './components/GallerySection'
 import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
 
@@ -60,6 +61,9 @@ function App() {
           <DiscographySection />
         </section>
         <div className="h-4 w-full bg-transparent"></div>
+        <section id="gallery" className="w-full h-screen">
+          <GallerySection />
+        </section>
       </main>
 
       <MusicPlayer />

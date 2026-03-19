@@ -90,9 +90,10 @@ const Navbar = () => {
               </span>
             ))}
           </a>
-          <a href="#discography" className="hover:text-gray-300 transition-colors duration-300">
-            Discography
+          <a href="#achievements" className="hover:text-gray-300 transition-colors duration-300">
+            Features Awards
           </a>
+          
         </div>
 
         {/* Logo giữa */}
@@ -102,8 +103,8 @@ const Navbar = () => {
 
         {/* Menu bên phải */}
         <div className="hidden md:flex flex-1 flex items-center justify-end gap-10">
-          <a href="#achievements" className="hover:text-gray-300 transition-colors duration-300">
-            Features Awards
+          <a href="#discography" className="hover:text-gray-300 transition-colors duration-300">
+            Discography
           </a>
           <a href="#gallery" className="hover:text-gray-300 transition-colors duration-300">
             Gallery

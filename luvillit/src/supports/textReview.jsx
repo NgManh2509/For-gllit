@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 export default function TextReveal() {
-  const textToAnimate = "This is an unofficial fan-made project. All rights to ILLIT, 'Super Real Me', images, audio, and related properties belong to BELIFT LAB and HYBE.";
+  const textToAnimate = "This is an unofficial fan-made project. All rights to ILLIT, images, audio, and related properties belong to BELIFT LAB and HYBE.";
   const words = textToAnimate.match(/[\p{L}\p{N}]+[^\s\p{L}\p{N}]?|[^\s]/gu) || [];
   const containerVariants = {
     hidden: {

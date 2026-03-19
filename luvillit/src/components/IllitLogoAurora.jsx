@@ -1,13 +1,5 @@
 import React from 'react'
 
-/**
- * IllitLogoAurora — ILLIT logo với gradient aurora động
- * Props:
- *  - height: chiều cao logo (default 36px)
- *  - colors: mảng màu gradient
- *  - speed: tốc độ animation (giây/vòng, nhỏ = nhanh)
- *  - className
- */
 const IllitLogoAurora = ({
   height = 36,
   colors = ['#FF8A9D', '#B6B5D8', '#89CFF0', '#FF8A9D'],
