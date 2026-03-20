@@ -6,10 +6,9 @@ const NoiseCard = ({
   height = "h-72",
   children,
   className = "",
-  animated = true,
-  noiseOpacity = 0.15, // Tăng nhẹ xíu để thấy rõ trên ảnh
+  noiseOpacity = 0.15,
   grainSize = 1,
-  imageUrl = "", // Thêm tham số nhận link ảnh
+  imageUrl = "",
 }) => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -20,13 +19,12 @@ const NoiseCard = ({
     if (!canvas || !container) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    
-    let animationFrameId;
-    
+
+    // Vẽ noise tĩnh một lần — không dùng rAF loop
     const drawNoise = () => {
       const { width, height } = canvas;
       if (width === 0 || height === 0) return;
-      
+
       if (grainSize === 1) {
         const imageData = ctx.createImageData(width, height);
         const data = imageData.data;
@@ -51,11 +49,7 @@ const NoiseCard = ({
       }
     };
 
-    const loop = () => {
-      drawNoise();
-      animationFrameId = requestAnimationFrame(loop);
-    };
-
+    // Chỉ vẽ lại khi container thay đổi kích thước (resize), không loop
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -66,20 +60,11 @@ const NoiseCard = ({
     });
 
     resizeObserver.observe(container);
-    
-    if (animated) {
-      loop();
-    } else {
-      drawNoise();
-    }
-    
+
     return () => {
-      if (animated) {
-        cancelAnimationFrame(animationFrameId);
-      }
       resizeObserver.disconnect();
     };
-  }, [animated, noiseOpacity, grainSize]);
+  }, [noiseOpacity, grainSize]);
 
  return (
     <div

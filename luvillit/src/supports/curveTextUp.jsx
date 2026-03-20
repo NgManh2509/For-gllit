@@ -30,11 +30,29 @@ const CanvasCurvedLoop = ({
     height: 0
   });
   const [textWidth, setTextWidth] = useState(0);
+
   const processedText = useMemo(() => {
     const trimmed = text.trim();
     if (!trimmed) return "";
     return trimmed + " ".repeat(Math.ceil(fontSize * gap / 10));
   }, [text, fontSize, gap]);
+
+  // Pre-compute width của từng ký tự 1 lần — tránh measureText trong rAF loop
+  const charWidthMap = useMemo(() => {
+    if (!processedText || !fontSize || !fontFamily || !fontWeight) return new Map();
+    const tempCanvas = document.createElement('canvas');
+    const ctx = tempCanvas.getContext('2d');
+    if (!ctx) return new Map();
+    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+    const map = new Map();
+    for (const char of processedText) {
+      if (!map.has(char)) {
+        map.set(char, ctx.measureText(char).width);
+      }
+    }
+    return map;
+  }, [processedText, fontSize, fontFamily, fontWeight]);
+
   useEffect(() => {
     const updateDimensions = () => {
       if (!canvasRef.current?.parentElement) return;
@@ -94,8 +112,7 @@ const CanvasCurvedLoop = ({
       let charX = baseX;
       for (let j = 0; j < processedText.length; j++) {
         const char = processedText[j];
-        const charMetrics = ctx.measureText(char);
-        const charWidth = charMetrics.width;
+        const charWidth = charWidthMap.get(char) ?? 0;
         if (charX + charWidth < 0 || charX > width) {
           charX += charWidth;
           continue;
@@ -115,7 +132,7 @@ const CanvasCurvedLoop = ({
       }
     }
     ctx.restore();
-  }, [dimensions, textWidth, processedText, fontSize, fontFamily, fontWeight, curveHeight]);
+  }, [dimensions, textWidth, processedText, charWidthMap, fontSize, fontFamily, fontWeight, curveHeight]);
   useEffect(() => {
     if (!isReady || !canvasRef.current || !dimensions.width || !textWidth) return;
     const ctx = canvasRef.current.getContext("2d", {

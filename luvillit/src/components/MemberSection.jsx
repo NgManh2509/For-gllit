@@ -54,8 +54,7 @@ const MemberSection = () => {
       }}>
         
       <NoiseCard 
-        imageUrl={`${import.meta.env.BASE_URL}memberSectionImg/mem.png`}        
-        animated={false}       
+        imageUrl={`${import.meta.env.BASE_URL}memberSectionImg/mem.png`}             
         noiseOpacity={0.2}    
         width="w-full"         
         height="h-auto"        

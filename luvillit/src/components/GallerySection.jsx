@@ -18,22 +18,32 @@ const galleryData = Array.from({ length: 42 }, (_, i) => {
 const DATA_LEN = galleryData.length;
 
 export default function GallerySection() {
-  const containerRef = useRef(null); // Ref mới cho vùng chứa tổng
+  const containerRef = useRef(null);
   const galleryWrapperRef = useRef(null);
-  const timelineTrackRef = useRef(null);
   const timelineContainerRef = useRef(null);
+  const timelineCanvasRef = useRef(null); 
 
   const poolRefs = useRef([]);
-  const tickWrapperRefs = useRef([]);
-  const tickRefs = useRef([]);
 
   useEffect(() => {
     const mainContainer = containerRef.current;
     const galleryWrapper = galleryWrapperRef.current;
-    const timelineTrack = timelineTrackRef.current;
     const timelineContainer = timelineContainerRef.current;
+    const timelineCanvas = timelineCanvasRef.current;
 
-    if (!mainContainer || !galleryWrapper || !timelineTrack || !timelineContainer) return;
+    if (!mainContainer || !galleryWrapper || !timelineContainer || !timelineCanvas) return;
+
+    const ctx = timelineCanvas.getContext('2d');
+    if (!ctx) return;
+
+    // Sync canvas kích thước với container
+    const syncCanvasSize = () => {
+      timelineCanvas.width  = timelineContainer.clientWidth;
+      timelineCanvas.height = timelineContainer.clientHeight;
+    };
+    syncCanvasSize();
+    const canvasSizeObserver = new ResizeObserver(syncCanvasSize);
+    canvasSizeObserver.observe(timelineContainer);
 
     let isDragging = false;
     let startX = 0;
@@ -48,44 +58,53 @@ export default function GallerySection() {
     // Biến lưu thời gian tương tác cuối để Auto-scroll
     let lastInteractionTime = Date.now();
 
-    // --- HÀM RENDER NỘI DUNG ---
-    const setNodeContent = (node, data) => {
-      node.innerHTML = ''; 
-      if (data.type === 'image') {
-        const wrapper = document.createElement('div');
-        wrapper.className = "flex flex-col items-center justify-center w-full h-full group cursor-pointer";
+    // Cache isMobile bên ngoài rAF — tránh forced reflow mỗi frame
+    let isMobile = window.innerWidth < 768;
+    const mobileObserver = new ResizeObserver(() => {
+      isMobile = window.innerWidth < 768;
+    });
+    mobileObserver.observe(document.documentElement);
 
-        const imgContainer = document.createElement('div');
-        imgContainer.className = "w-full overflow-hidden flex justify-center items-center h-[90%]";
-        
-        const img = document.createElement('img');
-        img.src = data.src;
-        img.alt = "Gallery";
-        img.className = "w-full h-full object-contain pointer-events-none"; 
-        
-        imgContainer.appendChild(img);
-        wrapper.appendChild(imgContainer);
+    // --- MOUNT-ONCE: Tạo cấu trúc DOM cho 14 pool slots, chỉ chạy 1 lần ---
+    poolRefs.current.forEach((node) => {
+      if (!node || node.children.length > 0) return;
+      // Wrapper ngoài cùng
+      const wrapper = document.createElement('div');
+      wrapper.className = "flex flex-col items-center justify-center w-full h-full group cursor-pointer";
 
-        const textWrapper = document.createElement('div');
-        textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end h-[10%]";
-        
-        const textInfo = document.createElement('div');
-        textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase transform translate-y-0 md:-translate-y-4 opacity-100 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
-        textInfo.innerText = `ILLIT Illustration #${data.num}`;
-        
-        textWrapper.appendChild(textInfo);
-        wrapper.appendChild(textWrapper);
+      // Container ảnh
+      const imgContainer = document.createElement('div');
+      imgContainer.className = "w-full overflow-hidden flex justify-center items-center h-[90%]";
 
-        node.appendChild(wrapper);
-      } else {
-        node.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl md:text-[3rem] font-black text-center bg-[#1d4ed8] text-white pointer-events-none leading-none">${data.content}</div>`;
-      }
-    };
+      const img = document.createElement('img');
+      img.alt = "Gallery";
+      img.className = "w-full h-full object-contain pointer-events-none";
+
+      imgContainer.appendChild(img);
+      wrapper.appendChild(imgContainer);
+
+      // Wrapper text
+      const textWrapper = document.createElement('div');
+      textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end h-[10%]";
+
+      const textInfo = document.createElement('div');
+      textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase transform translate-y-0 md:-translate-y-4 opacity-100 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
+
+      textWrapper.appendChild(textInfo);
+      wrapper.appendChild(textWrapper);
+      node.appendChild(wrapper);
+
+      // Lưu ref để rAF loop dùng, không rebuild DOM nữa
+      node._img  = img;
+      node._text = textInfo;
+      node._dataIndex = -1; // force update lần đầu
+    });
 
     // --- CÁC SỰ KIỆN KÉO THẢ VÀ CUỘN ---
     const startDrag = (e) => {
       isDragging = true;
-      startX = (e.pageX || e.touches?.[0].pageX) - targetTranslate;
+      const clientDrag = e.pageX || e.touches?.[0].pageX;
+      startX = clientDrag - targetTranslate;
       lastInteractionTime = Date.now();
     };
     const onDrag = (e) => {
@@ -124,24 +143,24 @@ export default function GallerySection() {
     const maxSkew = 15;       
 
     const render = () => {
-      const isMobile = window.innerWidth < 768;
+      // isMobile được cache bên ngoài — không đọc layout ở đây nữa
 
       // LOGIC AUTO-SCROLL CHO MOBILE (Tự chạy nếu thả tay > 1 giây)
       if (isMobile && !isDragging && (Date.now() - lastInteractionTime > 1000)) {
-        targetTranslate -= 0.8; // Tốc độ tự cuộn trôi về bên trái
+        targetTranslate -= 0.8;
       }
 
       currentTranslate += (targetTranslate - currentTranslate) * ease;
       const velocity = currentTranslate - prevTranslate;
       prevTranslate = currentTranslate;
-      
+
       let skewX = -velocity * skewFactor;
       if (skewX > maxSkew) skewX = maxSkew;
       if (skewX < -maxSkew) skewX = -maxSkew;
       if (Math.abs(velocity) < 0.05) skewX = 0;
 
-      const currentItemW = isMobile ? 260 : 320; 
-      const currentSlotW = isMobile ? 290 : 360; 
+      const currentItemW = isMobile ? 260 : 320;
+      const currentSlotW = isMobile ? 290 : 360;
 
       // --- CẬP NHẬT GALLERY ---
       const wrapperW = galleryWrapper.clientWidth;
@@ -153,17 +172,23 @@ export default function GallerySection() {
         const slotIndex = startSlot + i;
         const dataIndex = ((slotIndex % DATA_LEN) + DATA_LEN) % DATA_LEN;
 
+        // Chỉ mutate khi data thực sự thay đổi — không rebuild DOM
         if (node._dataIndex !== dataIndex) {
           node._dataIndex = dataIndex;
-          setNodeContent(node, galleryData[dataIndex]);
+          node._img.src   = galleryData[dataIndex].src;
+          node._text.textContent = `ILLIT Illustration #${galleryData[dataIndex].num}`;
         }
 
         const x = wrapperW / 2 + currentTranslate + slotIndex * currentSlotW - currentItemW / 2;
         node.style.transform = `translateX(${x}px) skewX(${skewX}deg)`;
       });
 
-      // --- CẬP NHẬT TIMELINE ---
-      timelineTrack.style.transform = `translateX(${currentTranslate}px)`;
+      // --- VẼ TIMELINE BẰNG CANVAS ---
+      const cW = timelineCanvas.width;
+      const cH = timelineCanvas.height;
+      const centerY = cH / 2;
+      const canvasCenterX = cW / 2;
+
       const exactCenterIndex = -currentTranslate / TICK_SPACING;
 
       let hoverCenterIndex = -1;
@@ -172,35 +197,47 @@ export default function GallerySection() {
         hoverCenterIndex = (mouseX - centerOfContainer - currentTranslate) / TICK_SPACING;
       }
 
-      const startIndex = Math.floor(exactCenterIndex) - Math.floor(VIRTUAL_TICKS_COUNT / 2);
+      ctx.clearRect(0, 0, cW, cH);
 
-      tickWrapperRefs.current.forEach((wrapper, j) => {
-        if (!wrapper || !tickRefs.current[j]) return;
-        const tick = tickRefs.current[j];
-        const absoluteIndex = startIndex + j; 
-        
-        wrapper.style.transform = `translateX(${absoluteIndex * TICK_SPACING}px)`;
-        
+      // Số ticks cần vẽ để phủ hết canvas (thêm đệm 2 bên)
+      const visibleTicks = Math.ceil(cW / TICK_SPACING) + 4;
+      const startIndex = Math.floor(exactCenterIndex) - Math.floor(visibleTicks / 2);
+
+      for (let j = 0; j < visibleTicks; j++) {
+        const absoluteIndex = startIndex + j;
+        // Vị trí x của tick: canvas center + offset theo scroll
+        const tickX = canvasCenterX + (absoluteIndex * TICK_SPACING + currentTranslate);
+
+        if (tickX < -TICK_SPACING || tickX > cW + TICK_SPACING) continue;
+
         const isMajor = absoluteIndex % 30 === 0;
-        tick.style.height = isMajor ? '24px' : '12px';
-        tick.style.opacity = isMajor ? '1' : '0.4';
+        const baseH   = isMajor ? 24 : 12;
+        const baseOp  = isMajor ? 1.0 : 0.4;
 
-        let finalScaleY = 1; 
+        // Center shrink effect
+        let finalScaleY = 1;
         const distToCenter = Math.abs(exactCenterIndex - absoluteIndex);
         if (distToCenter <= 3) {
-          finalScaleY = 0.2 + (distToCenter * 0.26);
+          finalScaleY = 0.2 + distToCenter * 0.26;
           if (finalScaleY > 1) finalScaleY = 1;
         }
 
+        // Hover wave effect
         if (isHoveringTimeline && !isDragging) {
           const distToHover = Math.abs(hoverCenterIndex - absoluteIndex);
-          if (distToHover <= 5) { 
-            const waveScale = 1 + (0.8) * Math.cos((distToHover / 5) * (Math.PI / 2));
+          if (distToHover <= 5) {
+            const waveScale = 1 + 0.8 * Math.cos((distToHover / 5) * (Math.PI / 2));
             finalScaleY = Math.max(finalScaleY, waveScale);
           }
         }
-        tick.style.transform = `scaleY(${finalScaleY})`;
-      });
+
+        const drawH = baseH * finalScaleY;
+        ctx.globalAlpha = baseOp;
+        ctx.fillStyle = '#808080';
+        ctx.fillRect(tickX - 1, centerY - drawH / 2, 2, drawH);
+      }
+
+      ctx.globalAlpha = 1;
 
       reqId = requestAnimationFrame(render);
     };
@@ -214,11 +251,13 @@ export default function GallerySection() {
       window.removeEventListener("touchstart", startDrag);
       window.removeEventListener("touchmove", onDrag);
       window.removeEventListener("touchend", endDrag);
-      
+
       if (timelineContainer) {
         timelineContainer.removeEventListener("mousemove", onTimelineMouseMove);
         timelineContainer.removeEventListener("mouseleave", onTimelineMouseLeave);
       }
+      mobileObserver.disconnect();
+      canvasSizeObserver.disconnect();
       cancelAnimationFrame(reqId);
     };
   }, []); 
@@ -258,23 +297,14 @@ export default function GallerySection() {
         className="relative w-full px-[5vw] h-[80px] md:h-[120px] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0" 
         ref={timelineContainerRef}
       >
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 w-[2px] h-[60px] bg-white -translate-x-1/2 z-10 pointer-events-none"></div>
-        
-        <div className="absolute left-1/2 top-0 h-full will-change-transform" ref={timelineTrackRef}>
-          {Array.from({ length: VIRTUAL_TICKS_COUNT }).map((_, j) => (
-            <div
-              key={j}
-              className="absolute -left-[8px] top-1/2 -translate-y-1/2 w-[16px] h-[60px] flex items-end justify-center"
-              ref={(el) => (tickWrapperRefs.current[j] = el)}
-            >
-              <div
-                className="w-[2px] origin-bottom will-change-transform"
-                style={{ backgroundColor: '#808080' }}
-                ref={(el) => (tickRefs.current[j] = el)}
-              />
-            </div>
-          ))}
-        </div>
+        {/* Đường kẻ trắng tâm giữ nguyên là DOM */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 w-[2px] h-[60px] bg-white -translate-x-1/2 z-10 pointer-events-none" />
+
+        {/* Canvas thay thế 150 tick DOM nodes */}
+        <canvas
+          ref={timelineCanvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+        />
       </div>
     </div>
   );

@@ -530,8 +530,6 @@ export default function MusicPlayer() {
         )}
 
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
           @keyframes marquee {
             0%   { transform: translateX(0); }
             30%  { transform: translateX(0); }
