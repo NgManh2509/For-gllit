@@ -154,7 +154,7 @@ const HeroSection = () => {
                     display: 'flex', justifyContent: alignMap[track.align], alignItems: 'baseline', gap: '0.6em', 
                     marginLeft: marginMap[track.align],
                   }}>
-                    <span style={{ fontSize: 'clamp(10px, 0.85vw, 11px)', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em', flexShrink: 0, alignSelf: 'flex-start', marginTop: '0.3em' }}>
+                    <span style={{ fontSize: 'clamp(7px, 1.5vw, 10px)', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em', flexShrink: 0, alignSelf: 'flex-start', marginTop: isMobile ? '0.3em' : '0.7em' }}>
                       {track.num}
                     </span>
 
