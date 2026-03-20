@@ -12,4 +12,21 @@ export default defineConfig({
     },
   },
   base: '/For-gllit/',
+  build: {
+    // Target modern browsers — smaller, faster output
+    target: 'es2020',
+    // Inline small assets (< 8KB) thành base64 để giảm requests
+    assetsInlineLimit: 8192,
+    // Tách CSS theo chunk — chỉ load CSS cần thiết
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        // Tách vendor libraries thành chunks riêng để browser cache tốt hơn
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-motion': ['framer-motion'],
+        },
+      },
+    },
+  },
 })

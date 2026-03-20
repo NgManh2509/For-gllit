@@ -11,7 +11,7 @@ const BASE = import.meta.env.BASE_URL;
 const galleryData = Array.from({ length: 42 }, (_, i) => {
   return { 
     type: 'image', 
-    src: `${BASE}/galleryCollection/illit (${i+1}).jpg`,
+    src: `${BASE}/galleryCollection/illit (${i+1}).webp`,
     num: i + 1 
   };
 });
@@ -70,25 +70,23 @@ export default function GallerySection() {
       if (!node || node.children.length > 0) return;
       // Wrapper ngoài cùng
       const wrapper = document.createElement('div');
-      wrapper.className = "flex flex-col items-center justify-center w-full h-full group cursor-pointer";
+      wrapper.className = "relative w-full h-full group cursor-pointer";
 
       // Container ảnh
-      const imgContainer = document.createElement('div');
-      imgContainer.className = "w-full overflow-hidden flex justify-center items-center h-[90%]";
 
       const img = document.createElement('img');
       img.alt = "Gallery";
       img.className = "w-full h-full object-contain pointer-events-none";
 
-      imgContainer.appendChild(img);
-      wrapper.appendChild(imgContainer);
+      wrapper.appendChild(img);
 
       // Wrapper text
       const textWrapper = document.createElement('div');
-      textWrapper.className = "w-full overflow-hidden mt-2 flex justify-end h-[10%]";
+      textWrapper.className = "absolute top-full right-0 mt-2 w-full flex justify-end pb-2";
 
       const textInfo = document.createElement('div');
-      textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase transform translate-y-0 md:-translate-y-4 opacity-100 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 ease-out pointer-events-none";
+      // text-right: căn phải thẳng cạnh phải của slot ảnh, w-full chiếm toàn bộ chiều rộng slot
+      textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase pointer-events-none drop-shadow-md whitespace-nowrap transition-all duration-300 ease-out opacity-100 translate-y-0 md:opacity-0 md:[transform:translateZ(-50px)_translateY(-10px)] md:group-hover:opacity-100 md:group-hover:[transform:translateZ(0px)_translateY(0px)]";
 
       textWrapper.appendChild(textInfo);
       wrapper.appendChild(textWrapper);
@@ -159,8 +157,14 @@ export default function GallerySection() {
       if (skewX < -maxSkew) skewX = -maxSkew;
       if (Math.abs(velocity) < 0.05) skewX = 0;
 
-      const currentItemW = isMobile ? 260 : 320;
-      const currentSlotW = isMobile ? 290 : 360;
+      // Desktop: giá trị cố định, không đổi theo resize — gap luôn là 60px (380-320)
+      // Mobile: compact hơn, gap 30px (290-260)
+      const actualWidth = poolRefs.current[0]?.clientWidth || 0;
+      const currentItemW = actualWidth > 0 ? actualWidth : (isMobile ? 260 : 320);
+      
+      // Chốt cứng khoảng trống giữa 2 bức ảnh (Gap)
+      const gap = isMobile ? 30 : 60; 
+      const currentSlotW = currentItemW + gap;
 
       // --- CẬP NHẬT GALLERY ---
       const wrapperW = galleryWrapper.clientWidth;
@@ -265,27 +269,31 @@ export default function GallerySection() {
   return (
     <div 
       ref={containerRef}
-      className="relative flex flex-col h-screen justify-center gap-6 md:gap-10 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit"
+      // FIX 1: Thay md:gap-10 thành md:gap-[clamp(24px,4vh,40px)] để khoảng trống giữa các khối tự động co giãn
+      className="relative flex flex-col h-screen justify-start pt-10 md:pt-15 gap-6 md:gap-[clamp(24px,4vh,40px)] overflow-hidden select-none cursor-grab active:cursor-grabbing bg-transparent text-inherit"
     >
       
       {/* --- HỌA TIẾT NỀN RESPONSIVE --- */}
       <div className="absolute top-[10%] md:top-[15%] left-[5%] md:left-[10%] w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-blue-500/10 rounded-full blur-[60px] md:blur-[85px] pointer-events-none" />
       <div className="absolute bottom-[15%] md:bottom-[20%] right-[10%] md:right-[15%] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-purple-500/10 rounded-full blur-[70px] md:blur-[100px] pointer-events-none" />
 
-      {/* HEADER RESPONSIVE (Đã thêm -mt-[10px] và bỏ pt để kéo cao hơn) */}
-      <div className="text-center -mt-[10px] md:pt-2 pointer-events-none z-10 w-full shrink-0">
-        <h1 className="text-4xl md:text-[4.5rem] font-noto font-bold text-white tracking-[0.1em] md:tracking-[0.2em] leading-tight md:leading-[0.9] m-0 uppercase">
+      {/* HEADER RESPONSIVE */}
+      <div className="text-center mt-[10px] md:pt-1 pointer-events-none z-10 w-full shrink-0">
+        <h1 className="font-noto font-bold text-white tracking-[0.1em] md:tracking-[0.2em] leading-tight md:leading-[0.9] m-0 uppercase text-4xl md:text-[clamp(2.5rem,6vh,4.5rem)]">
+          {/* FIX 2: Thay md:text-[4.5rem] cứng thành clamp để chữ Gallery nhỏ lại khi màn hình lùn đi */}
           GALLERY 
         </h1>
       </div>
 
       {/* GALLERY CONTAINER RESPONSIVE */}
-      <div className="relative overflow-hidden z-10 h-[360px] md:h-[500px] w-full shrink-0" id="gallery-wrapper" ref={galleryWrapperRef}>
+      {/* FIX 3: Thay md:h-[500px] thành md:h-[clamp(360px,50vh,500px)] */}
+      <div className="relative overflow-hidden z-10 w-full shrink-0 h-[380px] md:h-[clamp(360px,50vh,500px)]" id="gallery-wrapper" ref={galleryWrapperRef}>
         <div className="absolute inset-0 will-change-transform [perspective:1200px] [transform-style:preserve-3d]">
           {Array.from({ length: POOL_SIZE }).map((_, i) => (
             <div
               key={i}
-              className="absolute top-1/2 -translate-y-1/2 w-[260px] md:w-[320px] h-[340px] md:h-[420px] will-change-transform overflow-hidden"
+              // Chiều rộng sẽ tự động = Chiều cao * 0.8 (chuẩn tỉ lệ 1080x1350)
+              className="absolute top-1/2 -translate-y-1/2 will-change-transform h-[320px] md:h-[clamp(340px,45vh,420px)] aspect-[4/5]"
               ref={(el) => (poolRefs.current[i] = el)}
             />
           ))}
@@ -293,14 +301,13 @@ export default function GallerySection() {
       </div>
 
       {/* TIMELINE */}
+      {/* FIX 5: Thay md:h-[120px] thành md:h-[clamp(80px,12vh,120px)] */}
       <div 
-        className="relative w-full px-[5vw] h-[80px] md:h-[120px] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0" 
+        className="relative w-full px-[5vw] flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] z-10 shrink-0 h-[80px] md:h-[clamp(80px,12vh,120px)]" 
         ref={timelineContainerRef}
       >
-        {/* Đường kẻ trắng tâm giữ nguyên là DOM */}
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 w-[2px] h-[60px] bg-white -translate-x-1/2 z-10 pointer-events-none" />
 
-        {/* Canvas thay thế 150 tick DOM nodes */}
         <canvas
           ref={timelineCanvasRef}
           className="absolute inset-0 w-full h-full pointer-events-none"

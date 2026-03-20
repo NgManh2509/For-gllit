@@ -7,11 +7,11 @@ import members from '@/data/member.js'
 import MemberCard from './MemberCard'
 
 const memberFace = [
-  `${import.meta.env.BASE_URL}memberSectionImg/irohaFace.png`, 
-  `${import.meta.env.BASE_URL}memberSectionImg/minjuFace.png`, 
-  `${import.meta.env.BASE_URL}memberSectionImg/mokaFace.png`, 
-  `${import.meta.env.BASE_URL}memberSectionImg/wonheeFace.png`, 
-  `${import.meta.env.BASE_URL}memberSectionImg/yunahFace.png`
+  `${import.meta.env.BASE_URL}memberSectionImg/irohaFace.webp`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/minjuFace.webp`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/mokaFace.webp`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/wonheeFace.webp`, 
+  `${import.meta.env.BASE_URL}memberSectionImg/yunahFace.webp`
 ];
 
 const MemberSection = () => {
@@ -54,7 +54,7 @@ const MemberSection = () => {
       }}>
         
       <NoiseCard 
-        imageUrl={`${import.meta.env.BASE_URL}memberSectionImg/mem.png`}             
+        imageUrl={`${import.meta.env.BASE_URL}memberSectionImg/mem.webp`}             
         noiseOpacity={0.2}    
         width="w-full"         
         height="h-auto"        

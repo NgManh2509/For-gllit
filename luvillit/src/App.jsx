@@ -9,9 +9,11 @@ import DiscographySection from './components/DiscographySection'
 import GallerySection from './components/GallerySection'
 import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
+import autoWakeLook from './supports/hooks'
 
 
 function App() {
+  autoWakeLook()
   return (
     <>
       {/* Video Background */}
