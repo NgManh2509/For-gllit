@@ -12,12 +12,12 @@ const useAutoWakeLock = () => {
                     wakeLockRef.current = await navigator.wakeLock.request('screen');
                     console.log('Wake Lock is active');
 
-                    wakeLockRef.current.addEventListener('release', () => {
+                    wakeLockRef.current?.addEventListener('release', () => {
                         console.log('Wake Lock was released');
                         wakeLockRef.current = null;
                     });
                 } catch (err) {
-                    console.warn(`Wake Lock Error: ${err.name}, ${err.message}`);
+                    console.warn(`Wake Lock Error: ${err?.name}, ${err?.message}`, err);
                 }
             }
         };
@@ -46,7 +46,7 @@ const useAutoWakeLock = () => {
             document.removeEventListener('click', handleFirstTouch);
 
             if (wakeLockRef.current) {
-                wakeLockRef.current.release();
+                wakeLockRef.current?.release();
                 wakeLockRef.current = null;
             }
         };
