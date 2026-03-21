@@ -8,7 +8,7 @@ const TICK_SPACING = 16;
 const VIRTUAL_TICKS_COUNT = 150; 
 const BASE = import.meta.env.BASE_URL;
 
-const galleryData = Array.from({ length: 42 }, (_, i) => {
+const galleryData = Array.from({ length: 73 }, (_, i) => {
   return { 
     type: 'image', 
     src: `${BASE}/galleryCollection/illit (${i+1}).webp`,
