@@ -292,7 +292,7 @@ export default function GallerySection() {
 
       {/* GALLERY CONTAINER RESPONSIVE */}
       {/* ANIMATION STEP 6: Áp dụng class cho Gallery Wrapper (scale nhẹ, delay 200ms) */}
-      <div className={`relative overflow-hidden z-10 w-full shrink-0 h-[380px] md:h-[clamp(360px,50vh,500px)] ${transitionBase} delay-200 ${isInView ? visibleBase : hiddenBase}`} id="gallery-wrapper" ref={galleryWrapperRef}>
+      <div className={`relative overflow-x-clip z-10 w-full shrink-0 h-[380px] md:h-[clamp(360px,50vh,500px)] ${transitionBase} delay-200 ${isInView ? visibleBase : hiddenBase}`} id="gallery-wrapper" ref={galleryWrapperRef}>
         <div className="absolute inset-0 will-change-transform [perspective:1200px] [transform-style:preserve-3d]">
           {Array.from({ length: POOL_SIZE }).map((_, i) => (
             <div
