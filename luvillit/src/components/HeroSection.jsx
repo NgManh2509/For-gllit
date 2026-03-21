@@ -56,17 +56,29 @@ const HeroSection = () => {
       
       <div style={{
         position: 'absolute',
+
         inset: 0,
+
         zIndex: 1,
+
         background: `linear-gradient(
+
           to bottom,
+
           transparent        0%,
+
           transparent        15%,
-          rgba(0,0,0,0.10)   35%,
-          rgba(0,0,0,0.50)   55%,
-          rgba(0,0,0,0.82)   75%,
-          rgba(0,0,0,0.96)   100%
+
+          rgba(0,0,0,0.06)   35%,
+
+          rgba(0,0,0,0.42)   55%,
+
+          rgba(0,0,0,0.74)   75%,
+
+          rgba(0,0,0,0.88)   100%
+
         )`,
+
         pointerEvents: 'none',
       }} />
 
@@ -78,8 +90,8 @@ const HeroSection = () => {
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'space-between',
-          padding: '0 2.5vw',
-          lineHeight: 0.85,
+          padding: '1px 2.5vw',
+          lineHeight: 0.5,
         }}>
           <span style={{ fontSize: 'clamp(50px, 12vw, 160px)', fontWeight: 900, color: '#fff', letterSpacing: '-0.03em' }}>ILL</span>
 
@@ -107,54 +119,88 @@ const HeroSection = () => {
           flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
         }}>
           
-          <div style={{
-            display: 'grid',
-            // FIX CHÍ MẠNG 1: Tăng cột giữa lên 3.5fr (rất rộng) để text không bao giờ bị nghẹt
-            gridTemplateColumns: '1fr 3.5fr 1fr',
-            gap: '2vw',
-            alignItems: 'center', 
+        <div style={{
+          // Ở mobile chuyển sang flex dọc, desktop giữ nguyên grid
+          display: isMobile ? 'flex' : 'grid',
+          flexDirection: isMobile ? 'column' : 'row',
+          gridTemplateColumns: isMobile ? 'none' : '1fr 3.5fr 1fr',
+          gap: isMobile ? '8vw' : '2vw', // Tăng khoảng cách trên mobile để layout có không gian thở
+          alignItems: 'center', 
+          width: '100%',
+        }}>
+
+          {/* Left Members */}
+          <div style={{ 
+            display: 'flex', flexDirection: 'column', gap: 4, 
+            alignItems: 'flex-start', // Giữ căn trái cho chữ
+            alignSelf: isMobile ? 'flex-start' : 'flex-end', // Mobile: trượt lên sát viền trái
             width: '100%',
           }}>
-
-            {/* Left Members */}
+            {membersLeft.map((name, i) => (
+              <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5vw', fontSize: 'clamp(10px, 2vw, 12px)', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(255,255,255,0.65)' }}>
+                {i === 1 ? <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF69C0', flexShrink: 0 }} /> : <span style={{ width: 14 }} />}
+                {name}
+              </div>
+            ))}
+          </div>
+          {/* Center Tracklist */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            width: '100%',
+            flex: 1, 
+            margin: isMobile ? '2vh 0' : '0', 
+          }}>
             <div style={{ 
-              display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', 
-              alignSelf: 'flex-end', width: '100%',
-            }}>
-              {membersLeft.map((name, i) => (
-                <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5vw', fontSize: 'clamp(8px, 1.2vw, 12px)', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(255,255,255,0.65)' }}>
-                  {i === 1 ? <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF69C0', flexShrink: 0 }} /> : <span style={{ width: 14 }} />}
-                  {name}
-                </div>
-              ))}
-            </div>
-
-            {/* Center Tracklist */}
-            <div style={{ 
-              display: 'flex', flexDirection: 'column', gap: 0, width: '100%',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 1, // Vẫn giữ gap 0 để kiểm soát khoảng cách hoàn toàn bằng customMargins bên dưới
             }}>
               {tracks.map((track, i) => {
-                const alignMap  = { left: 'flex-start', center: 'center', right: 'flex-end' }
-                // Dùng vw để margin so le giữ tỷ lệ chuẩn từ to xuống nhỏ
-                const marginMap = { left: '0', center: '2.5vw', right: '5vw' }
+                
+                const textFontSize = isMobile ? 'clamp(18px, 6.5vw, 40px)' : 'clamp(24px, 4.5vw, 72px)';
+
+                // 1. MẢNG CHỈNH THỤT LỀ TRÁI/PHẢI (Như cũ)
+                const customIndents = isMobile 
+                  ? ['-0.3em', '1em', '2.8em', '-0.8em'] 
+                  : ['-0.3em', '1em', '3.0em', '-0.8em']; 
+
+                // 2. MẢNG CHỈNH KHOẢNG TRỐNG TRÊN/DƯỚI (MỚI)
+                // Thứ tự mảng: [Dưới dòng 01, Dưới dòng 02, Dưới dòng 03, Dưới dòng 04]
+                const customMargins = isMobile
+                  ? ['1px', '3px', '3px', '0px'] // <-- BẠN CHỈNH KHE HỞ MOBILE Ở ĐÂY
+                  : ['1px', '1px', '2px', '0px']; 
 
                 const textStyle = {
-                  // FIX CHÍ MẠNG 2: Ép sàn clamp xuống 12px, font max 3.2vw. Đảm bảo 100% vừa vặn.
-                  fontSize: 'clamp(12px, 3.2vw, 72px)',
+                  fontSize: textFontSize,
                   fontWeight: 900,
                   letterSpacing: '-0.02em',
                   color: '#fff',
-                  lineHeight: 1,
-                  // FIX CHÍ MẠNG 3: Cấm TextHighlighter bẻ dòng gây đè chữ
+                  lineHeight: 1, 
                   whiteSpace: 'nowrap',
                 }
 
                 return (
                   <div key={track.title} style={{
-                    display: 'flex', justifyContent: alignMap[track.align], alignItems: 'baseline', gap: '0.6em', 
-                    marginLeft: marginMap[track.align],
+                    display: 'flex', 
+                    justifyContent: 'flex-start', 
+                    alignItems: 'baseline', 
+                    gap: '0.4em', 
+                    marginLeft: customIndents[i], 
+                    // GỌI KHOẢNG TRỐNG DƯỚI CHO TỪNG DÒNG TẠI ĐÂY:
+                    marginBottom: customMargins[i], 
+                    fontSize: textFontSize, 
                   }}>
-                    <span style={{ fontSize: 'clamp(7px, 1.5vw, 10px)', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em', flexShrink: 0, alignSelf: 'flex-start', marginTop: isMobile ? '0.3em' : '0.7em' }}>
+                    <span style={{ 
+                      fontSize: 'clamp(10px, 1.5vw, 14px)', 
+                      fontWeight: 600, 
+                      color: 'rgba(255,255,255,0.45)', 
+                      letterSpacing: '0.1em', 
+                      flexShrink: 0, 
+                      alignSelf: 'flex-start', 
+                      marginTop: isMobile ? '0.1em' : '0.4em' 
+                    }}>
                       {track.num}
                     </span>
 
@@ -174,21 +220,23 @@ const HeroSection = () => {
                 )
               })}
             </div>
-
-            {/* Right Members */}
-            <div style={{ 
-              display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end', 
-              alignSelf: 'flex-end', width: '100%',
-            }}>
-              {membersRight.map((name, i) => (
-                <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5vw', fontSize: 'clamp(8px, 1.2vw, 12px)', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(255,255,255,0.65)' }}>
-                  {name}
-                  {i === 1 ? <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF69C0', flexShrink: 0 }} /> : <span style={{ width: 14 }} />}
-                </div>
-              ))}
-            </div>
-
           </div>
+          {/* Right Members */}
+          <div style={{ 
+            display: 'flex', flexDirection: 'column', gap: 4, 
+            alignItems: 'flex-end', // Giữ căn phải cho chữ
+            alignSelf: isMobile ? 'flex-end' : 'flex-end', // Mobile: trượt xuống sát viền phải
+            width: '100%',
+          }}>
+            {membersRight.map((name, i) => (
+              <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5vw', fontSize: 'clamp(10px, 2vw, 12px)', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(255,255,255,0.65)' }}>
+                {name}
+                {i === 1 ? <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF69C0', flexShrink: 0 }} /> : <span style={{ width: 14 }} />}
+              </div>
+            ))}
+          </div>
+
+        </div>
         </div>
       </div>
     </section>

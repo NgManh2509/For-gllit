@@ -22,6 +22,10 @@ const playlist = [
   { src: `${BASE}music/track18.mp3`, name: 'Lucky Girl Syndrome' },
   { src: `${BASE}music/track19.mp3`, name: 'Magnetic' },
   { src: `${BASE}music/track20.mp3`, name: 'Desperate' },
+  { src: `${BASE}music/track21.mp3`, name: 'Karitekita Neko (Do the Dance) (Japanese Ver.)' },
+  { src: `${BASE}music/track22.mp3`, name: 'Midnight Fiction' },
+  { src: `${BASE}music/track23.mp3`, name: 'My World' },
+  { src: `${BASE}music/track24.mp3`, name: 'Topping' },
 ];
 
 // ── SVG Icons ──────────────────────────────────────────────
