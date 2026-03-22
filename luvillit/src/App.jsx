@@ -10,6 +10,7 @@ import GallerySection from './components/GallerySection'
 import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
 import autoWakeLook from './supports/hooks'
+import StagesSection from './components/StagesSection'
 
 
 function App() {
@@ -65,6 +66,9 @@ function App() {
         <div className="h-4 w-full bg-transparent"></div>
         <section id="gallery" className="w-full h-screen">
           <GallerySection />
+        </section>
+        <section id="stages" className="w-full h-screen ">
+          <StagesSection />
         </section>
       </main>
 
