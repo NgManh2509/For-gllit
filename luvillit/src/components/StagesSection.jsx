@@ -122,6 +122,7 @@ const AccordionShowcase = () => {
                   preload="auto"
                   muted
                   playsInline
+                    loop
                   ref={(el) => {
                     if (el) {
                       if (isActive) {
