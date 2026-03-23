@@ -246,6 +246,16 @@ export default function GallerySection() {
 
     render();
 
+    // Pause rAF khi tab bị ẩn — tiết kiệm CPU background
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(reqId);
+      } else {
+        render();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     return () => {
       window.removeEventListener("mousedown", startDrag);
       window.removeEventListener("mousemove", onDrag);
@@ -258,6 +268,7 @@ export default function GallerySection() {
         timelineContainer.removeEventListener("mousemove", onTimelineMouseMove);
         timelineContainer.removeEventListener("mouseleave", onTimelineMouseLeave);
       }
+      document.removeEventListener('visibilitychange', handleVisibility);
       mobileObserver.disconnect();
       canvasSizeObserver.disconnect();
       observer.disconnect(); // ANIMATION STEP 3: Cleanup observer

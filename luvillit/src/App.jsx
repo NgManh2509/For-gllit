@@ -1,16 +1,19 @@
 import './index.css'
+import { lazy, Suspense } from 'react'
 import MusicPlayer from './components/MusicPlayer'
 import VideoBackGround from './components/VideoBackGround'
 import NavBar from './components/NavBar'
 import HeroSection from './components/HeroSection'
-import MemberSection from './components/MemberSection'
-import AwardSection from './components/AwardSection'
-import DiscographySection from './components/DiscographySection'
-import GallerySection from './components/GallerySection'
 import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
 import autoWakeLook from './supports/hooks'
-import StagesSection from './components/StagesSection'
+
+// Lazy-load heavy below-fold sections — chỉ tải khi cần
+const MemberSection      = lazy(() => import('./components/MemberSection'))
+const AwardSection       = lazy(() => import('./components/AwardSection'))
+const DiscographySection = lazy(() => import('./components/DiscographySection'))
+const GallerySection     = lazy(() => import('./components/GallerySection'))
+const StagesSection      = lazy(() => import('./components/StagesSection'))
 
 
 function App() {
@@ -53,22 +56,32 @@ function App() {
       <main>
         <HeroSection />
         <section id="about">
-          <MemberSection />
+          <Suspense fallback={null}>
+            <MemberSection />
+          </Suspense>
         </section>
         <div className="h-4 w-full bg-transparent"></div>
         <section id="achievements" className="w-full overflow-x-hidden block">
-          <AwardSection />
+          <Suspense fallback={null}>
+            <AwardSection />
+          </Suspense>
         </section>
         <div className="h-4 w-full bg-transparent"></div>
         <section id="discography" className="w-full overflow-x-hidden block">
-          <DiscographySection />
+          <Suspense fallback={null}>
+            <DiscographySection />
+          </Suspense>
         </section>
         <div className="h-4 w-full bg-transparent"></div>
         <section id="gallery" className="w-full h-screen">
-          <GallerySection />
+          <Suspense fallback={null}>
+            <GallerySection />
+          </Suspense>
         </section>
         <section id="stages" className="w-full h-screen ">
-          <StagesSection />
+          <Suspense fallback={null}>
+            <StagesSection />
+          </Suspense>
         </section>
       </main>
 

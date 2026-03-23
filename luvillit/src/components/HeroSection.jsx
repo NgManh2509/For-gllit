@@ -41,6 +41,8 @@ const HeroSection = () => {
       <img
         src={`${import.meta.env.BASE_URL}grpPhoto.jpg`}
         alt="ILLIT background"
+        fetchPriority="high"
+        decoding="sync"
         style={{
           position: 'absolute',
           inset: 0,

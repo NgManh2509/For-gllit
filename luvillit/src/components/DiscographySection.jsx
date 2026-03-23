@@ -48,7 +48,7 @@ const CornerDecorator = ({ position, label, reverse = false }) => (
 );
 
 // Component xử lý SVG: Text uốn cong (Chỉ giữ lại vòng tròn)
-const CurvedTextCircle = ({ text, radius, direction = 'normal', duration = '40s', textSize = 'text-2xl', opacity = 'opacity-30', offset = '0%' }) => {
+const CurvedTextCircle = ({ text, radius, direction = 'normal', duration = '40s', textSize = 'text-2xl', opacity = 'opacity-30', offset = '0%', extraStyle = {} }) => {
   const size = radius * 2 + 100;
   const center = size / 2;
   const pathD = `M ${center}, ${center} m -${radius}, 0 a ${radius},${radius} 0 1,1 ${radius * 2},0 a ${radius},${radius} 0 1,1 -${radius * 2},0`;
@@ -58,7 +58,14 @@ const CurvedTextCircle = ({ text, radius, direction = 'normal', duration = '40s'
       <svg 
         viewBox={`0 0 ${size} ${size}`} 
         className="w-full h-full overflow-visible"
-        style={{ animation: `pure-spin ${duration} linear infinite ${direction === 'reverse' ? 'reverse' : 'normal'}` }}
+        style={{
+          animationName: 'pure-spin',
+          animationDuration: duration,
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+          animationDirection: direction === 'reverse' ? 'reverse' : 'normal',
+          animationPlayState: extraStyle.animationPlayState ?? 'running',
+        }}
       >
         <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
         <defs>
@@ -74,15 +81,31 @@ const CurvedTextCircle = ({ text, radius, direction = 'normal', duration = '40s'
   );
 };
 
-// Component chứa 2 quỹ đạo tròn
-const AnimatedCircles = () => (
-  <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
-    {/* Quỹ đạo BE:LIFT (Xoay ngược chiều) */}
-    <CurvedTextCircle text="BE:LIFT" radius={800} duration="70s" direction="reverse" offset="55%" opacity="opacity-40" textSize="text-2xl md:text-5xl" />
-    {/* Quỹ đạo ILLIT (Xoay thuận chiều) */}
-    <CurvedTextCircle text="ILLIT" radius={500} duration="50s" offset="85%" opacity="opacity-60" textSize="text-xl md:text-4xl" />
-  </div>
-);
+// Component chứa 2 quỹ đạo tròn — tự pause khi off-screen
+const AnimatedCircles = () => {
+  const ref = React.useRef(null);
+  const [isPaused, setIsPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setIsPaused(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const pauseStyle = isPaused ? { animationPlayState: 'paused' } : {};
+
+  return (
+    <div ref={ref} className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+      <CurvedTextCircle text="BE:LIFT" radius={800} duration="70s" direction="reverse" offset="55%" opacity="opacity-40" textSize="text-2xl md:text-5xl" extraStyle={pauseStyle} />
+      <CurvedTextCircle text="ILLIT" radius={500} duration="50s" offset="85%" opacity="opacity-60" textSize="text-xl md:text-4xl" extraStyle={pauseStyle} />
+    </div>
+  );
+};
 
 const DiscographySection = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -93,24 +116,32 @@ const DiscographySection = () => {
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    let timer = null;
+
+    const tick = () => {
       const timeNow = new Date().getTime();
       const distance = endTime - timeNow;
-
-      if (distance < 0) {
-        clearInterval(timer);
-        return;
-      }
-
+      if (distance < 0) { clearInterval(timer); return; }
       setTimeLeft({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
-    }, 1000);
+    };
 
-    return () => clearInterval(timer);
+    const startTimer = () => { tick(); timer = setInterval(tick, 1000); };
+    const stopTimer  = () => clearInterval(timer);
+
+    // Không chạy countdown khi tab ẩn
+    const handleVis = () => document.hidden ? stopTimer() : startTimer();
+    document.addEventListener('visibilitychange', handleVis);
+    startTimer();
+
+    return () => {
+      stopTimer();
+      document.removeEventListener('visibilitychange', handleVis);
+    };
   }, []);
 
   return (
@@ -216,6 +247,8 @@ const DiscographySection = () => {
                   <img
                     src={album.src}
                     alt={album.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
                   />
                   

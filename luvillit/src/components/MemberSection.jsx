@@ -76,7 +76,7 @@ const MemberSection = () => {
         }}
         onClick={() => handleMemberClick('Iroha')}      
       > 
-        <MemberFrame imageUrl={memberFace[0]} name="Iroha" />
+        <MemberFrame imageUrl={memberFace[0]} name="Iroha" loading="lazy" />
       </div>
 
       {/* 2. Wonhee: w-250 x-468 h-233 y-451 */}
@@ -88,7 +88,7 @@ const MemberSection = () => {
         }}
         onClick={() => handleMemberClick('Wonhee')}      
       > 
-        <MemberFrame imageUrl={memberFace[3]} name="Wonhee" />
+        <MemberFrame imageUrl={memberFace[3]} name="Wonhee" loading="lazy" />
       </div>
 
       {/* 3. Minju: w-318 x-550 h-305 y-1055 */}
@@ -100,7 +100,7 @@ const MemberSection = () => {
         }}
         onClick={() => handleMemberClick('Minju')}      
       > 
-        <MemberFrame imageUrl={memberFace[1]} name="Minju" />
+        <MemberFrame imageUrl={memberFace[1]} name="Minju" loading="lazy" />
       </div>
 
       {/* 4. Moka: TẠM THỜI DÙNG SỐ CŨ QUY ĐỔI NGƯỢC (Chờ bạn cập nhật) */}
@@ -112,7 +112,7 @@ const MemberSection = () => {
           }}
           onClick={() => handleMemberClick('Moka')}      
       > 
-        <MemberFrame imageUrl={memberFace[2]} name="Moka" />
+        <MemberFrame imageUrl={memberFace[2]} name="Moka" loading="lazy" />
       </div>
 
       {/* 5. Yunah: TẠM THỜI DÙNG SỐ CŨ QUY ĐỔI NGƯỢC (Chờ bạn cập nhật) */}
@@ -124,7 +124,7 @@ const MemberSection = () => {
         }}
         onClick={() => handleMemberClick('Yunah')}      
       > 
-        <MemberFrame imageUrl={memberFace[4]} name="Yunah" />
+        <MemberFrame imageUrl={memberFace[4]} name="Yunah" loading="lazy" />
       </div>
 
 

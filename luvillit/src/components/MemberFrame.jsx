@@ -14,6 +14,8 @@ const MemberFrame = ({
         <img 
           src={imageUrl} 
           alt={name} 
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover block"
         />
         <div 

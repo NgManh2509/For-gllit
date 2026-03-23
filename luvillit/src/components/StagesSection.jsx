@@ -9,13 +9,14 @@ const AccordionShowcase = () => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        let isMounted = true;
         const checkIsMobile = () => {
-            setIsMobile(window.innerWidth < 768);
+            if (isMounted) setIsMobile(window.innerWidth < 768);
         };
-    
-        checkIsMobile(); 
-        window.addEventListener('resize', checkIsMobile);
-        return () => window.removeEventListener('resize', checkIsMobile);
+        checkIsMobile();
+        const ro = new ResizeObserver(checkIsMobile);
+        ro.observe(document.documentElement);
+        return () => { isMounted = false; ro.disconnect(); };
     }, []);
     
   const [activeCardId, setActiveCardId] = useState(null);
@@ -73,6 +74,8 @@ const AccordionShowcase = () => {
               <img
                 src={idol.img}
                 alt={`${idol.name} Mobile`}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover object-[50%_20%] transition-transform duration-700 z-10 block md:hidden"
               />
               
@@ -80,6 +83,8 @@ const AccordionShowcase = () => {
               <img
                 src={idol.img}
                 alt={`${idol.name} Desktop`}
+                loading="lazy"
+                decoding="async"
                 className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-10 hidden md:block ${isActive ? 'scale-105' : ''}`}
               />
 
@@ -119,9 +124,10 @@ const AccordionShowcase = () => {
                   key={idol.vid[activeVideoIndex]}
                   className="w-full h-full object-cover shadow-2xl" 
                   src={idol.vid[activeVideoIndex]}
-                  preload="auto"
+                  preload="metadata"
                   muted
                   playsInline
+                  loop
                   ref={(el) => {
                     if (el) {
                       if (isActive) {
