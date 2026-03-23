@@ -117,7 +117,7 @@ const AccordionShowcase = () => {
                 {/* Video */}
                 <video
                   key={idol.vid[activeVideoIndex]}
-                  className="w-full h-full object-cover shadow-2xl" 
+                  className="w-full h-full object-cover object-[50%_15%] shadow-2xl" 
                   src={idol.vid[activeVideoIndex]}
                   preload="metadata"
                   muted
