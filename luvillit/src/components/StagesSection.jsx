@@ -74,8 +74,8 @@ const AccordionShowcase = () => {
               <img
                 src={idol.img}
                 alt={`${idol.name} Mobile`}
-                loading="lazy"
-                decoding="async"
+                loading="eager"
+                fetchPriority="low"
                 className="absolute inset-0 w-full h-full object-cover object-[50%_20%] transition-transform duration-700 z-10 block md:hidden"
               />
               
@@ -83,8 +83,8 @@ const AccordionShowcase = () => {
               <img
                 src={idol.img}
                 alt={`${idol.name} Desktop`}
-                loading="lazy"
-                decoding="async"
+                loading="eager"
+                fetchPriority="low"
                 className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-10 hidden md:block ${isActive ? 'scale-105' : ''}`}
               />
 

@@ -1,5 +1,5 @@
 import './index.css'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import MusicPlayer from './components/MusicPlayer'
 import VideoBackGround from './components/VideoBackGround'
 import NavBar from './components/NavBar'
@@ -7,6 +7,7 @@ import HeroSection from './components/HeroSection'
 import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
 import autoWakeLook from './supports/hooks'
+import fanCamData from './data/fanCam'
 
 // Lazy-load heavy below-fold sections — chỉ tải khi cần
 const MemberSection      = lazy(() => import('./components/MemberSection'))
@@ -18,6 +19,16 @@ const StagesSection      = lazy(() => import('./components/StagesSection'))
 
 function App() {
   autoWakeLook()
+  useEffect(() => {
+    fanCamData.forEach(idol => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = idol.img;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   return (
     <>
       {/* Video Background */}
