@@ -247,8 +247,6 @@ const DiscographySection = () => {
                   <img
                     src={album.src}
                     alt={album.name}
-                    loading="lazy"
-                    decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
                   />
                   
