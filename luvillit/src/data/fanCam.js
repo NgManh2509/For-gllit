@@ -41,7 +41,7 @@ const fanCamData = [
         name:'Wonhee',
         img: `${BASE}/memberImages/wonhee1.webp`,
         vid:[
-            'https://res.cloudinary.com/dgj1wlh6b/video/upload/v1774195556/wonheeFC2_mutzfi.mp4',
+            'https://res.cloudinary.com/dgj1wlh6b/video/upload/v1774195563/wonheeFC1_bnr2tx.mp4',
             'https://res.cloudinary.com/dgj1wlh6b/video/upload/v1774195556/wonheeFC2_mutzfi.mp4',
         ],
     },
