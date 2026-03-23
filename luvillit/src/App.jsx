@@ -83,7 +83,6 @@ function App() {
             <DiscographySection />
           </Suspense>
         </section>
-        <div className="h-4 w-full bg-transparent"></div>
         <section id="gallery" className="w-full h-screen">
           <Suspense fallback={null}>
             <GallerySection />

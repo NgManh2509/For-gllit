@@ -62,30 +62,25 @@ const AccordionShowcase = () => {
             <div
               key={idol.id}
               onClick={() => handleCardClick(idol.id, idol.vid)}
+              style={{ willChange: 'flex' }}
               className={`
                 relative cursor-pointer overflow-hidden 
                 border-b md:border-b-0 md:border-r border-white/10 last:border-b-0 md:last:border-r-0
-                transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
+                transition-[flex] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
                 ${isActive ? 'flex-[3] md:flex-[1.5] cursor-default' : 'flex-1'}
               `}
             >
               
-              {/* 1. Ảnh dành cho Mobile */}
+              {/* Ảnh dùng chung cho cả Mobile và Desktop để tránh giật lag */}
               <img
                 src={idol.img}
-                alt={`${idol.name} Mobile`}
-                loading="eager"
-                fetchPriority="low"
-                className="absolute inset-0 w-full h-full object-cover object-[50%_20%] transition-transform duration-700 z-10 block md:hidden"
-              />
-              
-              {/* 2. Ảnh dành cho Desktop */}
-              <img
-                src={idol.img}
-                alt={`${idol.name} Desktop`}
-                loading="eager"
-                fetchPriority="low"
-                className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-10 hidden md:block ${isActive ? 'scale-105' : ''}`}
+                alt={`${idol.name} FanCam`}
+                loading="lazy" /* Đợi cuộn tới mới tải để nhường tốc độ mạng cho nội dung trên cùng */
+                decoding="async" /* Parse ảnh mượt hơn ở chế độ chạy nền */
+                className={`absolute inset-0 w-full h-full object-cover z-10 
+                  object-[50%_20%] md:object-center /* Dùng mốc cắt ảnh khác nhau cho mobile và desktop */
+                  transition-transform duration-700 
+                  ${isActive ? 'md:scale-105' : ''}`}
               />
 
               {/* LỚP PHỦ */}

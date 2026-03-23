@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TextHighlighter } from '../supports/textHighlighter'
+import TextReveal from '../supports/textReview1'
 
 const tracks = [
   { num: '01', title: 'MY WORLD',            highlight: false, align: 'left'   },
@@ -31,30 +32,67 @@ const HeroSection = () => {
       style={{
         fontFamily: '"Outfit Variable", Outfit, sans-serif',
         marginTop: '100vh',
-        borderRadius: '28px 28px 0 0',
         position: 'relative',
         minHeight: '100vh',
         overflow: 'hidden',
       }}
     >
-      {/* ── Background: Cố định nét ảnh, chỉ đẩy điểm nhìn sang trái ── */}
-      <img
-        src={`${import.meta.env.BASE_URL}grpPhoto.jpg`}
-        alt="ILLIT background"
-        fetchPriority="high"
-        decoding="sync"
-        style={{
+      {/* ── Background: Chia đôi không gian cho ảnh và text (Desktop: ảnh trái/text phải, Mobile: text trên/ảnh dưới) ── */}
+      <div style={{
           position: 'absolute',
           inset: 0,
-          width: '100%', 
-          height: '100%',
-          objectFit: isMobile ? 'cover' : 'none', 
-          objectPosition: isMobile ? 'top center' : '30% 35%', 
           zIndex: 0,
-          left: 0, 
-          borderRadius: '28px 28px 0 0',
-        }}
-      />
+          display: 'flex',
+          flexDirection: isMobile ? 'column-reverse' : 'row',
+            borderRadius: '28px 28px 0 0',
+          backgroundColor: 'transparent',
+      }}>
+        {/* === TỈ LỆ CHIA MÀN HÌNH KHUNG CHỨA BÊN NGOÀI LÀ 5 : 5 (mỗi bên 50%) === */}
+        {/* Nếu bạn muốn Ảnh nhỏ lại hẹp đi, Text rộng ra: Hãy đổi flex Khối Ảnh thành 4, và flex Khối Text thành 6 (Tổng là 10) */}
+
+        {/* Khối Ảnh */}
+        <div style={{ 
+          flex: 7, /* <<< TỈ LỆ CỦA ẢNH TRÊN TỔNG KHUNG HÌNH (VD: 7 phần, text 3 phần) */
+          position: 'relative',
+          transform: isMobile ? 'translateX(0vw)' : 'translateX(6vw)', /* Tăng thành 5vw để qua phải, hoặc số âm -5vw để lùi trái */
+        }}>
+          <img
+            src={`${import.meta.env.BASE_URL}grpPhoto.jpg`}
+            alt="ILLIT background"
+            fetchPriority="high"
+            decoding="sync"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%', 
+              height: '100%',
+              objectFit: 'cover', 
+              objectPosition: isMobile ? 'top center' : '30% 65%', 
+              zIndex: 0,
+              left: 0, 
+            }}
+          />
+        </div>
+
+        {/* Khối Text */}
+        <div style={{ 
+            flex:3, /* <<< ĐỔI SỐ 5 NÀY THÀNH TỈ LỆ TEXT TƯƠNG ỨNG (VD: Ảnh là 4 thì Text là 6) */
+            
+            /* --- TỌA ĐỘ Y (LÊN/XUỐNG) --- */
+            alignItems: 'flex-start', /* Đổi từ 'center' thành 'flex-start' để tính mốc từ trên cùng */
+            paddingTop:'5vh', /* Tăng/giảm số này để đẩy khối Y xuống dưới */
+            
+            /* --- TỌA ĐỘ X (TRÁI/PHẢI) --- */
+            justifyContent: 'flex-start',
+            paddingLeft:'10vw', /* Tăng số để đẩy sang phải, giảm để sang trái */
+            
+            paddingRight: '5vw',
+            display: isMobile ? 'none' : 'flex',
+        }}>
+           <TextReveal />
+        </div>
+
+      </div>
       
       <div style={{
         position: 'absolute',
