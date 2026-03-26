@@ -33,7 +33,7 @@ const AccordionShowcase = () => {
   };
 
   const renderDesktop = () => (
-    <div className="flex flex-col h-screen w-full bg-transparent overflow-hidden text-white font-serif pt-6 md:pt-10">
+    <div className="flex flex-col h-screen w-full bg-transparent overflow-hidden text-white font-serif pt-0 md:pt-5">
       
       <div className="flex flex-col items-center justify-center shrink-0 mb-[10px] bg-transparent relative z-10 -mt-8 md:-mt-6">
         
@@ -134,6 +134,9 @@ const AccordionShowcase = () => {
             </div>
           );
         })}
+      </div>
+      <div className="h-[60px] shrink-0 flex justify-center items-center font-sans z-50 pointer-events-none bg-neutral-950">
+        <p className="italic text-white text-[13px] font-medium font-['Lora',serif]">Fin.</p>
       </div>
 
     </div>
@@ -263,6 +266,9 @@ const AccordionShowcase = () => {
             </div>
           );
         })}
+      </div>
+      <div className="h-[60px] shrink-0 flex justify-center items-center font-sans z-50 pointer-events-none">
+        <p className="italic text-white text-[13px] font-medium font-['Lora',serif]">Fin.</p>
       </div>
     </div>
   );

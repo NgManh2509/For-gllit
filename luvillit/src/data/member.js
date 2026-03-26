@@ -1,4 +1,3 @@
-// Lấy base path từ cấu hình Vite (sẽ là '/For-gllit/')
 const BASE = import.meta.env.BASE_URL;
 
 const introVoice = [

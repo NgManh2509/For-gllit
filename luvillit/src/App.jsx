@@ -8,6 +8,7 @@ import TextReveal from './supports/textReview'
 import { motion } from 'framer-motion'
 import autoWakeLook from './supports/hooks'
 import fanCamData from './data/fanCam'
+import FooterSection from './components/FooterSection'
 // Lazy-load heavy below-fold sections — chỉ tải khi cần
 const MemberSection      = lazy(() => import('./components/MemberSection'))
 const AwardSection       = lazy(() => import('./components/AwardSection'))
@@ -70,13 +71,11 @@ function App() {
             <MemberSection />
           </Suspense>
         </section>
-        <div className="h-4 w-full bg-transparent"></div>
         <section id="achievements" className="w-full overflow-x-hidden block">
           <Suspense fallback={null}>
             <AwardSection />
           </Suspense>
         </section>
-        <div className="h-4 w-full bg-transparent"></div>
         <section id="discography" className="w-full overflow-x-hidden block">
           <Suspense fallback={null}>
             <DiscographySection />
@@ -93,7 +92,7 @@ function App() {
           </Suspense>
         </section>
       </main>
-
+      <FooterSection />
 
       <MusicPlayer />
     </>

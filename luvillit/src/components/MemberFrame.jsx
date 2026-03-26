@@ -7,7 +7,7 @@ const MemberFrame = ({
   className = "" 
 }) => {
   return (
-    <div className={`relative inline-block w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] ${className}`}>
+    <div className={`relative inline-block w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] @container ${className}`}>
       
       <div className="relative w-full h-full border-[clamp(1px,0.2vw,3px)] border-white box-border bg-black">
         
@@ -20,18 +20,16 @@ const MemberFrame = ({
         />
         <div 
           className="absolute bg-white flex items-center justify-center z-10
-                     -top-3 -right-[2.5px] px-3 py-1.5
-                     sm:-top-4 sm:-right-2 sm:px-4 sm:py-2 
-                     md:-top-6.5 md:-right-[3.2px] md:px-5 md:py-2.5"
+                     -top-[13cqw] -translate-y-1/2 -right-[clamp(1px,0.2vw,3px)] 
+                     px-[5cqw] py-[2cqw]"
         >
           <span 
             className="text-black"
             style={{ 
               fontFamily: "'Pixelify Sans', sans-serif", 
-              // Tăng min-size lên 12px để đảm bảo luôn đọc được trên mobile
-              fontSize: 'clamp(12px, 2.5vw, 24px)', 
+              fontSize: '20cqw', 
               lineHeight: '1',
-              transform: 'translateY(10%)' // Giữ nguyên để canh giữa quang học cho pixel font
+              transform: 'translateY(10%)'
             }}
           >
             {name}
