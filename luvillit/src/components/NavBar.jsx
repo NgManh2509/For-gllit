@@ -73,7 +73,7 @@ const Navbar = () => {
       right: 20,
       zIndex: 1000,
     }}>
-      <nav className="bg-transparent flex items-center px-10 py-6 text-[16px] uppercase tracking-widest text-white"
+      <nav className="bg-transparent flex items-center px-2 py-2 text-[16px] uppercase tracking-widest text-white"
         style={{ fontFamily: '"Outfit Variable", Outfit, sans-serif' }}
       >
 

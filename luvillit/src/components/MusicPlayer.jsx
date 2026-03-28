@@ -26,6 +26,10 @@ const playlist = [
   { src: `${BASE}music/track22.mp3`, name: 'Midnight Fiction' },
   { src: `${BASE}music/track23.mp3`, name: 'My World' },
   { src: `${BASE}music/track24.mp3`, name: 'Topping' },
+  { src: `${BASE}music/track25.mp3`, name: 'ILLIT (아일릿) ♡桃色片想い♡ covered by #WONHEE ｜ GLITTER DAY IN JAPAN' },
+  { src: `${BASE}music/track26.mp3`, name: 'ILLIT (아일릿) Darling covered by #MOKA ｜ GLITTER DAY IN JAPAN' },
+  { src: `${BASE}music/track27.mp3`, name: 'ILLIT (아일릿) GLAMOROUS SKY covered by #MINJU ｜ GLITTER DAY IN JAPAN' },
+  { src: `${BASE}music/track28.mp3`, name: 'ILLIT (아일릿) 君はロックを聴かない covered by #YUNAH ｜ GLITTER DAY IN JAPAN' },
 ];
 
 // ── SVG Icons ──────────────────────────────────────────────
