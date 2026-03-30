@@ -156,3 +156,130 @@
     @apply font-sans;
   }
 }
+
+/* === VIDEO SKELETON === */
+@keyframes skeleton-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+.video-skeleton {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  z-index: 20;
+}
+
+/* Shimmer sweep dùng chung */
+.video-skeleton__shimmer {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+}
+.video-skeleton__shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 80%
+  );
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Play button tròn ở giữa */
+.video-skeleton__play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.1);
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.video-skeleton__play::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255,255,255,0.15) 50%,
+    transparent 80%
+  );
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Bottom bar: title + progress */
+.video-skeleton__bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.video-skeleton__title {
+  height: 12px;
+  width: 55%;
+  border-radius: 6px;
+}
+
+.video-skeleton__subtitle {
+  height: 9px;
+  width: 35%;
+  border-radius: 6px;
+  opacity: 0.5;
+}
+
+.video-skeleton__progress-track {
+  height: 3px;
+  width: 100%;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+  position: relative;
+}
+.video-skeleton__progress-track::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 30%;
+  background: rgba(255,255,255,0.3);
+  border-radius: 99px;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* dots loading nhỏ dưới play button */
+.video-skeleton__dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 16px;
+}
+.video-skeleton__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+.video-skeleton__dot:nth-child(2) { animation-delay: 0.2s; }
+.video-skeleton__dot:nth-child(3) { animation-delay: 0.4s; }
