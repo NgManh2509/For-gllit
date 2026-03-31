@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import discoLink from '../data/discographyData';
 
+const BASE = import.meta.env.BASE_URL;
 const endTime = new Date('2026-04-30 18:00:00').getTime();
+//const upcomingCover = `${BASE}upcoming/upcomingAlbum1.webp`;
+const upcomingCover = 'https://i.scdn.co/image/ab67616d00001e02622eacf64d0b4cf0e054ecd8'
+const upcomingLink = 'https://open.spotify.com/prerelease/3tCfAinmCQYnOgyqbSPXpk?si=5a9b649710ef445a';
 
 // Component phụ trợ làm hiệu ứng trượt lên
 const FadeIn = ({ children, delay = 0 }) => {
@@ -188,20 +192,29 @@ const DiscographySection = () => {
           <FadeIn delay={200}>
             <div className="w-full flex flex-col items-center mb-16">
               <div className="relative group w-64 h-64 sm:w-80 sm:h-80 bg-black aspect-square overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300">
-                <span className="text-6xl font-black text-white transition-transform duration-300 group-hover:scale-110 tracking-widest">
-                  ? ? ?
-                </span>
-                
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <a
+                  href={upcomingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full max-w-[320px] block relative group aspect-square overflow-hidden bg-gray-100 cursor-pointer transition-all duration-300"
+                >
+                  <img
+                    src={upcomingCover}
+                    alt="Upcoming Album"
+                    className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
+                  />
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                    <div className="absolute md:inset-0 md:flex md:flex-col md:items-center md:justify-center md:p-4 max-md:bottom-0 max-md:right-0 max-md:p-0 max-md:m-0 max-md:translate-x-2 max-md:translate-y-2 flex flex-col items-end md:items-center">
                     <span className="text-gray-300 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-1">
                       4th Mini Album
                     </span>
                     <span className="text-white text-2xl font-bold font-serif">
-                      MAMIHLAPINATAPA
+                      MAMIHLAPINATAPAI
                     </span>
                   </div>
                 </div>
+                </a>
               </div>
 
               {/* Countdown Timer */}

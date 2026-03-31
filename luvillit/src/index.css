@@ -157,7 +157,6 @@
   }
 }
 
-/* === VIDEO SKELETON === */
 @keyframes skeleton-shimmer {
   0%   { transform: translateX(-100%); }
   100% { transform: translateX(200%); }
@@ -180,7 +179,6 @@
   z-index: 20;
 }
 
-/* Shimmer sweep dùng chung */
 .video-skeleton__shimmer {
   position: relative;
   overflow: hidden;
@@ -200,7 +198,6 @@
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-/* Play button tròn ở giữa */
 .video-skeleton__play {
   width: 56px;
   height: 56px;
@@ -225,7 +222,6 @@
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-/* Bottom bar: title + progress */
 .video-skeleton__bottom {
   position: absolute;
   bottom: 0;
@@ -268,7 +264,6 @@
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-/* dots loading nhỏ dưới play button */
 .video-skeleton__dots {
   display: flex;
   gap: 6px;
