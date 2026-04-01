@@ -27,7 +27,8 @@ const CanvasCurvedLoop = ({
   const [isReady, setIsReady] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: 0,
-    height: 0
+    height: 0,
+    dpr: typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
   });
   const [textWidth, setTextWidth] = useState(0);
 
@@ -56,11 +57,12 @@ const CanvasCurvedLoop = ({
   useEffect(() => {
     const updateDimensions = () => {
       if (!canvasRef.current?.parentElement) return;
-      const rect = canvasRef.current.parentElement.getBoundingClientRect();
+      const width = canvasRef.current.parentElement.offsetWidth;
       const dpr = window.devicePixelRatio || 1;
       setDimensions({
-        width: rect.width * dpr,
-        height: height * dpr
+        width: width,
+        height: height,
+        dpr: dpr
       });
     };
     updateDimensions();
@@ -95,11 +97,13 @@ const CanvasCurvedLoop = ({
   const drawCurvedText = useCallback((ctx, offset) => {
     const {
       width,
-      height: canvasHeight
+      height: canvasHeight,
+      dpr
     } = dimensions;
     if (!width || !canvasHeight || !textWidth || !processedText || !canvasRef.current) return;
-    ctx.clearRect(0, 0, width, canvasHeight);
+    ctx.clearRect(0, 0, width * dpr, canvasHeight * dpr);
     ctx.save();
+    ctx.scale(dpr, dpr);
     ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
     ctx.fillStyle = getComputedStyle(canvasRef.current).color;
     ctx.textAlign = "center";
@@ -206,7 +210,7 @@ const CanvasCurvedLoop = ({
     imageRendering: "crisp-edges"
   };
   return <div className={`relative w-full ${className}`}>
-      <canvas ref={canvasRef} width={dimensions.width} height={dimensions.height} className="w-full block" style={canvasStyle} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp} onPointerCancel={handlePointerUp} />
+      <canvas ref={canvasRef} width={dimensions.width * dimensions.dpr} height={dimensions.height * dimensions.dpr} className="w-full block" style={canvasStyle} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp} onPointerCancel={handlePointerUp} />
       {!isReady && <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-white/50">Loading...</div>
         </div>}
