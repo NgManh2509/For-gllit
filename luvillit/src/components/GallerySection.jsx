@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
+import galleryCount from '../supports/galleryCount.json';
 
 // =========================================================
 // --- 0. CẤU HÌNH & DỮ LIỆU ---
 // =========================================================
 const POOL_SIZE = 14;           
 const TICK_SPACING = 16;        
-const VIRTUAL_TICKS_COUNT = 150; 
+const VIRTUAL_TICKS_COUNT = 150;
 const BASE = import.meta.env.BASE_URL;
 
-const galleryData = Array.from({ length: 73 }, (_, i) => {
+const galleryData = Array.from({ length: galleryCount.count }, (_, i) => {
   return { 
     type: 'image', 
     src: `${BASE}/galleryCollection/illit (${i+1}).webp`,
@@ -94,11 +95,11 @@ export default function GallerySection() {
 
       const img = document.createElement('img');
       img.alt = "Gallery";
-      img.className = "w-full h-full object-contain pointer-events-none";
+      img.className = "w-full h-full object-cover pointer-events-none";
       wrapper.appendChild(img);
 
       const textWrapper = document.createElement('div');
-      textWrapper.className = "absolute top-full right-0 mt-2 w-full flex justify-end pb-2"; 
+      textWrapper.className = "absolute top-full right-0 mt-0 w-full flex justify-end pb-2"; 
 
       const textInfo = document.createElement('div');
       textInfo.className = "text-white text-[10px] md:text-xs font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase pointer-events-none drop-shadow-md whitespace-nowrap transition-all duration-300 ease-out opacity-100 translate-y-0 md:opacity-0 md:[transform:translateZ(-50px)_translateY(-10px)] md:group-hover:opacity-100 md:group-hover:[transform:translateZ(0px)_translateY(0px)]";
@@ -308,7 +309,7 @@ export default function GallerySection() {
           {Array.from({ length: POOL_SIZE }).map((_, i) => (
             <div
               key={i}
-              className="absolute top-1/2 -translate-y-1/2 will-change-transform h-[320px] md:h-[clamp(340px,45vh,420px)] aspect-[4/5]"
+              className="absolute top-1/2 -translate-y-1/2 will-change-transform h-[320px] md:h-[clamp(340px,45vh,420px)] aspect-[3/4]"
               ref={(el) => (poolRefs.current[i] = el)}
             />
           ))}
