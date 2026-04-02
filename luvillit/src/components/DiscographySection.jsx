@@ -3,9 +3,10 @@ import discoLink from '../data/discographyData';
 
 const BASE = import.meta.env.BASE_URL;
 const endTime = new Date('2026-04-30 18:00:00').getTime();
-//const upcomingCover = `${BASE}upcoming/upcomingAlbum1.webp`;
 const upcomingCover = 'https://i.scdn.co/image/ab67616d00001e02622eacf64d0b4cf0e054ecd8'
 const upcomingLink = 'https://open.spotify.com/prerelease/3tCfAinmCQYnOgyqbSPXpk?si=5a9b649710ef445a';
+
+
 
 // Component phụ trợ làm hiệu ứng trượt lên
 const FadeIn = ({ children, delay = 0 }) => {
@@ -112,6 +113,8 @@ const AnimatedCircles = () => {
 };
 
 const DiscographySection = () => {
+  //xử lý khi đếm ngược xong 
+  const [isReleased, setIsReleased] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -125,7 +128,7 @@ const DiscographySection = () => {
     const tick = () => {
       const timeNow = new Date().getTime();
       const distance = endTime - timeNow;
-      if (distance < 0) { clearInterval(timer); return; }
+      if (distance < 0) { clearInterval(timer); setIsReleased(true); return; }
       setTimeLeft({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
@@ -133,6 +136,11 @@ const DiscographySection = () => {
         seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
     };
+    const timeNow = new Date().getTime();
+    if (endTime - timeNow < 0) {
+      setIsReleased(true);
+      return;
+    }
 
     const startTimer = () => { tick(); timer = setInterval(tick, 1000); };
     const stopTimer  = () => clearInterval(timer);
@@ -219,30 +227,38 @@ const DiscographySection = () => {
 
               {/* Countdown Timer */}
               <div className="mt-6 text-center">
-                <p className="text-sm text-gray-300 font-bold uppercase tracking-widest mb-2 drop-shadow-md">
-                  Time until comeback
-                </p>
-                <div className="flex gap-4 text-xl sm:text-2xl font-bold font-serif text-white justify-center drop-shadow-md">
-                  <div className="flex flex-col items-center">
-                    <span>{timeLeft.days.toString().padStart(2, '0')}</span>
-                    <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Days</span>
-                  </div>
-                  <span>:</span>
-                  <div className="flex flex-col items-center">
-                    <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
-                    <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Hours</span>
-                  </div>
-                  <span>:</span>
-                  <div className="flex flex-col items-center">
-                    <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
-                    <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Mins</span>
-                  </div>
-                  <span>:</span>
-                  <div className="flex flex-col items-center">
-                    <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
-                    <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Secs</span>
-                  </div>
-                </div>
+                {isReleased ? (
+                   <p className="text-lg sm:text-xl font-bold font-serif text-white tracking-widest drop-shadow-md animate-pulse">
+                      Album's out — Stream it now!
+                    </p>
+                ):(
+                  <>
+                    <p className="text-sm text-gray-300 font-bold uppercase tracking-widest mb-2 drop-shadow-md">
+                      Time until comeback
+                    </p>
+                    <div className="flex gap-4 text-xl sm:text-2xl font-bold font-serif text-white justify-center drop-shadow-md">
+                      <div className="flex flex-col items-center">
+                        <span>{timeLeft.days.toString().padStart(2, '0')}</span>
+                        <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Days</span>
+                      </div>
+                      <span>:</span>
+                      <div className="flex flex-col items-center">
+                        <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
+                        <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Hours</span>
+                      </div>
+                      <span>:</span>
+                      <div className="flex flex-col items-center">
+                        <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                        <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Mins</span>
+                      </div>
+                      <span>:</span>
+                      <div className="flex flex-col items-center">
+                        <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                        <span className="text-xs text-gray-400 uppercase font-sans font-semibold">Secs</span>
+                      </div>
+                    </div>
+                </>
+                )}
               </div>
             </div>
           </FadeIn>
