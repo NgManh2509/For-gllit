@@ -115,13 +115,14 @@ export default function GallerySection() {
 
     const startDrag = (e) => {
       isDragging = true;
-      const clientDrag = e.pageX || e.touches?.[0].pageX;
+      const clientDrag = e.pageX ?? e.touches?.[0].pageX;
       startX = clientDrag - targetTranslate;
       lastInteractionTime = Date.now();
+      galleryWrapper.setPointerCapture(e.pointerId);
     };
     const onDrag = (e) => {
       if (!isDragging) return;
-      const x = e.pageX || e.touches?.[0].pageX;
+      const x = e.pageX ?? e.touches?.[0].pageX;
       targetTranslate = x - startX;
       lastInteractionTime = Date.now();
     };
@@ -129,12 +130,10 @@ export default function GallerySection() {
       isDragging = false; 
     };
 
-    window.addEventListener("mousedown", startDrag);
-    window.addEventListener("mousemove", onDrag);
-    window.addEventListener("mouseup", endDrag);
-    window.addEventListener("touchstart", startDrag, { passive: false });
-    window.addEventListener("touchmove", onDrag, { passive: false });
-    window.addEventListener("touchend", endDrag);
+    galleryWrapper.addEventListener("pointerdown", startDrag);
+    window.addEventListener("pointermove", onDrag);
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
 
     const onTimelineMouseMove = (e) => {
       isHoveringTimeline = true;
@@ -258,12 +257,10 @@ export default function GallerySection() {
     document.addEventListener('visibilitychange', handleVisibility);
 
     return () => {
-      window.removeEventListener("mousedown", startDrag);
-      window.removeEventListener("mousemove", onDrag);
-      window.removeEventListener("mouseup", endDrag);
-      window.removeEventListener("touchstart", startDrag);
-      window.removeEventListener("touchmove", onDrag);
-      window.removeEventListener("touchend", endDrag);
+      galleryWrapper.removeEventListener("pointerdown", startDrag);
+      window.removeEventListener("pointermove", onDrag);
+      window.removeEventListener("pointerup", endDrag);
+      window.removeEventListener("pointercancel", endDrag);
 
       if (timelineContainer) {
         timelineContainer.removeEventListener("mousemove", onTimelineMouseMove);
