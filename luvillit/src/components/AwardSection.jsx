@@ -73,14 +73,14 @@ const AwardCard = ({ item, bentoClass, index, isMobile }) => {
 
       <div className="absolute inset-0 bg-black/30 z-10 transition-colors duration-300 group-hover:bg-black/60" />
 
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-events-none">
-        <span className="text-[10px] md:text-xs font-medium text-white/90 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 tracking-wider uppercase mb-2 shadow-lg">
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-2 text-center transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-events-none" style={{ gap: 'clamp(3px, 0.4vw, 8px)' }}>
+        <span className="whitespace-nowrap font-medium text-white/90 bg-white/10 backdrop-blur-md rounded-full border border-white/20 tracking-wider uppercase shadow-lg overflow-hidden text-ellipsis max-w-[90%]" style={{ fontSize: 'clamp(7px, 0.65vw, 12px)', padding: 'clamp(3px, 0.3vw, 6px) clamp(6px, 0.7vw, 12px)' }}>
           {item.hosting}
         </span>
-        <h3 className="font-serif font-bold text-white leading-tight mb-1 px-2 drop-shadow-md" style={{ fontSize: 'calc(1rem + 0.5vw)' }}>
+        <h3 className="whitespace-nowrap font-serif font-bold text-white drop-shadow-md overflow-hidden text-ellipsis max-w-[95%] px-1" style={{ fontSize: 'clamp(9px, 0.85vw, 18px)', lineHeight: 1.2, margin: 0 }}>
           {item.awardName}
         </h3>
-        <span className="text-xs md:text-sm font-serif italic text-white/80 drop-shadow-sm">
+        <span className="whitespace-nowrap font-serif italic text-white/80 drop-shadow-sm" style={{ fontSize: 'clamp(7px, 0.65vw, 14px)' }}>
           In {item.awardYear}
         </span>
       </div>

@@ -48,7 +48,7 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
       
       {/* Khung bao ngoài cùng */}
       <motion.div 
-        className="w-[92vw] md:w-full mx-auto font-sans relative max-w-[680px]" 
+        className="w-[92vw] md:w-full mx-auto font-sans relative" style={{ maxWidth: 'clamp(300px, 47vw, 680px)' }}
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -56,10 +56,10 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
       >
         
         {/* Thẻ trắng (Card) */}
-        <div className="relative border border-gray-100 overflow-hidden bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] pt-10 pb-6 px-5 md:pb-8 md:px-8">
+        <div className="relative border border-gray-100 overflow-hidden bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]" style={{ paddingTop: 'clamp(28px, 3vw, 40px)', paddingBottom: 'clamp(20px, 2.5vw, 32px)', paddingLeft: 'clamp(16px, 2.5vw, 32px)', paddingRight: 'clamp(16px, 2.5vw, 32px)' }}>
           
           {/* Lỗ khuyết giống ID card */}
-          <div className="absolute left-1/2 -translate-x-1/2 rounded-full z-20 top-3 md:top-4 w-[50px] md:w-[68px] h-[12px] md:h-[16px] bg-[#e6e8eb] shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)]" />
+          <div className="absolute left-1/2 -translate-x-1/2 rounded-full z-20 bg-[#e6e8eb] shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)]" style={{ top: 'clamp(10px, 1vw, 16px)', width: 'clamp(40px, 3.5vw, 68px)', height: 'clamp(10px, 0.9vw, 16px)' }} />
 
           {/* Nút đóng */}
           <button 
@@ -72,12 +72,12 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
           </button>
           
           {/* Phần 1: Ảnh & Thông tin */}
-          <div className="flex items-center gap-4 md:gap-6 mt-0 md:mt-2">
+          <div className="flex items-center" style={{ gap: 'clamp(12px, 1.8vw, 24px)', marginTop: 'clamp(0px, 0.5vw, 8px)' }}>
             
             {/* Khung Ảnh */}
             <div 
-              className="flex-shrink-0 relative group w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[140px] md:h-[140px]" 
-              style={{ touchAction: 'pan-y' }}
+              className="flex-shrink-0 relative group" 
+              style={{ touchAction: 'pan-y', width: 'clamp(80px, 9vw, 140px)', height: 'clamp(80px, 9vw, 140px)' }}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -108,18 +108,19 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
 
             {/* Chi tiết Tên / Chức vụ */}
             <div className="flex-grow flex flex-col justify-center min-w-0">
-              <h1 className="font-serif font-medium text-black leading-tight mb-0.5 md:mb-1 text-2xl sm:text-3xl md:text-[34px] truncate">
+              <h1 className="font-serif font-medium text-black leading-tight truncate" style={{ fontSize: 'clamp(18px, 2.2vw, 34px)', marginBottom: 'clamp(2px, 0.3vw, 4px)' }}>
                 {member.stageName}
               </h1>
-              <p className="font-normal leading-snug text-[#d85547] text-[15px] md:text-[17px] truncate">
+              <p className="font-normal leading-snug text-[#d85547] truncate" style={{ fontSize: 'clamp(12px, 1.1vw, 17px)' }}>
                 {member.pos}
               </p>
 
               <button
                 onClick={() => onPlayAudio(member.intro)}
-                className="mt-2 md:mt-4 flex items-center justify-center gap-1.5 md:gap-2 border border-gray-200 font-medium text-black hover:bg-gray-50 transition-colors w-full sm:w-fit focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white rounded-lg px-2 py-1.5 md:px-3 md:py-1.5 text-[11.5px] md:text-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                className="flex items-center justify-center border border-gray-200 font-medium text-black hover:bg-gray-50 transition-colors w-full sm:w-fit focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white rounded-lg shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                style={{ marginTop: 'clamp(8px, 1vw, 16px)', gap: 'clamp(4px, 0.5vw, 8px)', paddingLeft: 'clamp(8px, 0.8vw, 12px)', paddingRight: 'clamp(8px, 0.8vw, 12px)', paddingTop: 'clamp(5px, 0.4vw, 6px)', paddingBottom: 'clamp(5px, 0.4vw, 6px)', fontSize: 'clamp(10px, 0.9vw, 14px)' }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" className="shrink-0" style={{ width: 'clamp(12px, 1vw, 16px)', height: 'clamp(12px, 1vw, 16px)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                   <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
                   <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
@@ -130,17 +131,17 @@ const MemberCard = ({ member, onClose, onPlayAudio }) => {
           </div>
 
           {/* Phần 2: Bio */}
-          <div className="border border-gray-200/80 bg-[#f6f6f6] rounded-[16px] md:rounded-[20px] p-4 md:p-6 mt-5 md:mt-8">
-            <h2 className="font-serif font-medium text-black mb-1.5 md:mb-3 text-[16px] md:text-[18px]">Birthday</h2>
-            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar mb-2 md:mb-3 text-[14px] md:text-[15px] leading-relaxed max-h-[90px] md:max-h-[140px]">
+          <div className="border border-gray-200/80 bg-[#f6f6f6]" style={{ borderRadius: 'clamp(12px, 1.2vw, 20px)', padding: 'clamp(12px, 1.5vw, 24px)', marginTop: 'clamp(16px, 2vw, 32px)' }}>
+            <h2 className="font-serif font-medium text-black" style={{ marginBottom: 'clamp(4px, 0.5vw, 12px)', fontSize: 'clamp(13px, 1.1vw, 18px)' }}>Birthday</h2>
+            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar leading-relaxed" style={{ marginBottom: 'clamp(6px, 0.8vw, 12px)', fontSize: 'clamp(11px, 0.9vw, 15px)', maxHeight: 'clamp(60px, 6vw, 140px)' }}>
               {member.birthDate}
             </div>
-            <h2 className="font-serif font-medium text-black mb-1.5 md:mb-3 text-[16px] md:text-[18px]">Place of birth</h2>
-            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar mb-2 md:mb-3 text-[14px] md:text-[15px] leading-relaxed max-h-[90px] md:max-h-[140px]">
+            <h2 className="font-serif font-medium text-black" style={{ marginBottom: 'clamp(4px, 0.5vw, 12px)', fontSize: 'clamp(13px, 1.1vw, 18px)' }}>Place of birth</h2>
+            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar leading-relaxed" style={{ marginBottom: 'clamp(6px, 0.8vw, 12px)', fontSize: 'clamp(11px, 0.9vw, 15px)', maxHeight: 'clamp(60px, 6vw, 140px)' }}>
               {member.homeTown}
             </div>
-            <h2 className="font-serif font-medium text-black mb-1.5 md:mb-3 text-[16px] md:text-[18px]">Bio</h2>
-            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar text-[14px] md:text-[15px] leading-relaxed max-h-[90px] md:max-h-[140px]">
+            <h2 className="font-serif font-medium text-black" style={{ marginBottom: 'clamp(4px, 0.5vw, 12px)', fontSize: 'clamp(13px, 1.1vw, 18px)' }}>Bio</h2>
+            <div className="text-gray-700 overflow-y-auto pr-2 custom-scrollbar leading-relaxed" style={{ fontSize: 'clamp(11px, 0.9vw, 15px)', maxHeight: 'clamp(60px, 6vw, 140px)' }}>
               {member.bio}
             </div>
           </div>
