@@ -38,14 +38,14 @@ function App() {
       <NavBar />
 
       {/* Intro Overlay / Disclaimer */}
-      <div className="absolute top-0 left-0 w-full h-[100vh] flex flex-col items-center justify-center z-10 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-[100dvh] flex flex-col items-center justify-center z-10 pointer-events-none px-4 sm:px-8">
         
         {/* Lời tuyên bố bản quyền */}
         <TextReveal />
 
         {/* Scroll down for more */}
         <motion.div 
-          className="mt-12 flex flex-col items-center gap-3 pointer-events-auto cursor-pointer select-none"
+          className="mt-8 sm:mt-10 md:mt-12 lg:mt-16 flex flex-col items-center gap-2 md:gap-3 pointer-events-auto cursor-pointer select-none"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 1.2, ease: "easeOut" }}
@@ -54,7 +54,7 @@ function App() {
           <motion.img
             src={`${BASE}/pressStartIcon.svg`}
             alt="Scroll down for more"
-            className="w-100 md:w-120 opacity-80 hover:opacity-100 transition-opacity duration-300"
+            className="w-24 sm:w-28 md:w-32 lg:w-40 opacity-80 hover:opacity-100 transition-opacity duration-300"
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           />
@@ -63,7 +63,7 @@ function App() {
             animate={{ y: [0, 6, 0] }}
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="40" height="40" style={{ imageRendering: 'pixelated' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10" style={{ imageRendering: 'pixelated' }}>
               <g shapeRendering="crispEdges">
                 <path d="M 5 1 H 11 V 6 H 15 V 8 H 14 V 9 H 13 V 10 H 12 V 11 H 11 V 12 H 10 V 14 H 6 V 12 H 5 V 11 H 4 V 10 H 3 V 9 H 2 V 8 H 1 V 6 H 5 V 1 Z" fill="#FDFAFE"/>
                 <path d="M 6 2 H 10 V 7 H 14 V 8 H 13 V 9 H 12 V 10 H 11 V 11 H 10 V 12 H 9 V 13 H 7 V 12 H 6 V 11 H 5 V 10 H 4 V 9 H 3 V 8 H 2 V 7 H 6 V 2 Z" fill="#F38AB9"/>
