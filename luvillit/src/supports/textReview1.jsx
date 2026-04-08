@@ -39,16 +39,13 @@ export default function TextReveal() {
     
     /* === CHỈNH ĐỘ RỘNG Ở ĐÂY === */
     /* Hãy thay 'max-w-5xl' thành 'max-w-4xl', 'max-w-3xl' hoặc 'max-w-2xl' để bóp chiều rộng lại! */
-    className="font-bold text-justify max-w-4xl leading-relaxed text-white"
+    className="text-xs sm:text-sm md:text-xl lg:text-2xl font-bold text-left max-w-5xl leading-relaxed flex flex-wrap justify-start gap-x-1.5 gap-y-1 sm:gap-x-2 sm:gap-y-1.5 md:gap-x-3 md:gap-y-2.5 text-white"
     >
         {words.map((word, index) => (
           <React.Fragment key={index}>
             <motion.span variants={childVariants} transition={{
               duration: 0.8,
               ease: [0.25, 0.46, 0.45, 0.94]
-            }} style={{
-              display: "inline-block",
-              verticalAlign: "top"
             }}>
               {word}
             </motion.span>

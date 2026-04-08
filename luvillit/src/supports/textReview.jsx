@@ -33,14 +33,14 @@ export default function TextReveal() {
       <motion.div style={{
       display: "flex",
       flexWrap: "wrap",
-      justifyContent: 'center'
-    }} variants={containerVariants} initial="hidden" animate="visible" className="text-2xl font-bold text-center max-w-5xl leading-relaxed">
+      justifyContent: 'center',
+      gap: '4px' // Thêm gap nhỏ để chữ dễ thở hơn
+    }} variants={containerVariants} initial="hidden" animate="visible" className="opacity-80 text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-center max-w-4xl leading-relaxed">
         {words.map((word, index) => <motion.span key={index} variants={childVariants} transition={{
         duration: 0.8,
         ease: [0.25, 0.46, 0.45, 0.94]
       }} style={{
-        marginRight: "12px",
-        marginTop: "10px"
+        // Bỏ margin cứng, dùng gap ở thẻ thay thế
       }}>
             {word}
           </motion.span>)}
