@@ -11,7 +11,7 @@ const VideoBackGround = () => {
 
     const loadVideo = () => {
       if (!video.src) {
-        video.src = 'https://res.cloudinary.com/dgj1wlh6b/video/upload/q_auto,f_auto/v1773160399/ILLIT_%EC%95%84%EC%9D%BC%EB%A6%BF_NOT_ME_Official_MV_mzwcfl.mp4';
+        video.src = 'https://res.cloudinary.com/dqdssnpbf/video/upload/f_auto,q_auto/v1775908840/videoMV/gjvw33co3bkskrmg9spc.webm';
         video.play().catch(() => {});
       }
     };
