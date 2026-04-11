@@ -41,13 +41,13 @@ function App() {
       <div className="absolute top-0 left-0 w-full h-[100dvh] z-10 pointer-events-none overflow-hidden">
         
         {/* Lời tuyên bố bản quyền -> Căn giữa trong khoảng trống an toàn (tránh logo ở trên & nút bấm ở dưới) */}
-        <div className="w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 pt-24 sm:pt-32 pb-32 sm:pb-36">
+        <div className="w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 pt-24 sm:pt-32 pb-48 sm:pb-52 md:pb-56 lg:pb-44">
           <TextReveal />
         </div>
 
         {/* Scroll down for more -> Cố định ở đáy màn hình, luôn nằm giữa */}
         <motion.div 
-          className="absolute bottom-20 sm:bottom-8 md:bottom-30 left-0 right-0 flex flex-col items-center gap-2 md:gap-3 pointer-events-auto cursor-pointer select-none"
+          className="absolute bottom-16 sm:bottom-10 md:bottom-12 lg:bottom-16 left-0 right-0 flex flex-col items-center gap-2 md:gap-3 pointer-events-auto cursor-pointer select-none"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 1.2, ease: "easeOut" }}
