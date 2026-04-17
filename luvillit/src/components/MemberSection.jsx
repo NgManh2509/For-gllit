@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import CurveTextUp from '@/supports/curveTextUp'
 import NoiseCard from '@/supports/NoiseCard'
@@ -17,6 +17,22 @@ const memberFace = [
 const MemberSection = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const audioRef = useRef(null);
+  const containerRef = useRef(null);
+  const [scaleFactor, setScaleFactor] = useState(1);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (!containerRef.current) return;
+      const w = containerRef.current.offsetWidth;
+      const scale = Math.min(Math.max(w / 1440, 0.2), 1.2);
+      setScaleFactor(scale);
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateScale);
+      updateScale();
+      return () => window.removeEventListener('resize', updateScale);
+    }
+  }, []);
 
   const handleMemberClick = (stageName) => {
     const foundMember = members.find(m => m.stageName === stageName);
@@ -45,6 +61,7 @@ const MemberSection = () => {
 
   return (
     <div id="member"
+      ref={containerRef}
       style={{
         fontFamily: '"Outfit Variable", Outfit, sans-serif',
         position: 'relative', 
@@ -131,10 +148,22 @@ const MemberSection = () => {
       <div className='absolute inset-0 backdrop-blur-none md:backdrop-blur-[1.5px] pointer-events-none' />
 
       {/* CÁC THÀNH PHẦN TEXT BÊN TRÊN */}
-      <div className="absolute top-[0%] md:top-0 left-1/2 w-[200vw] md:w-full -translate-x-1/2 z-10 transform scale-50 md:scale-100 origin-top transition-transform duration-300">
-        <CurveTextUp 
-          text="ILLIT" speed={1} curveHeight={50} fontSize={64} color="#ffffff" height={200} gap={0.5} easing={0.05} direction="left" interactive={true} className="text-white"
-        />
+      <div className="absolute left-0 w-full z-1 md:-top-[1%] -top-[6.5%]">
+        <div className="w-full">
+          <CurveTextUp 
+            text="ILLIT" 
+            speed={1} 
+            curveHeight={50 * scaleFactor} 
+            fontSize={64 * scaleFactor} 
+            color="#ffffff" 
+            height={200 * scaleFactor} 
+            gap={0.5} 
+            easing={0.05} 
+            direction="left" 
+            interactive={true} 
+            className="text-white"
+          />
+        </div>
       </div>
 
       <div className="absolute top-[5%] md:top-[10%] left-[5%] z-30 text-white/40 text-[clamp(7px,1vw,10px)] uppercase tracking-[0.3em] font-light">
