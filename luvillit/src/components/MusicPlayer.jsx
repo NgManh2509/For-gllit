@@ -2,6 +2,11 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 
 const BASE = import.meta.env.BASE_URL
 const playlist = [
+  { src: `${BASE}music/track30.mp3`, name: 'GRWM (Get Ready With Me)' },
+  { src: `${BASE}music/track31.mp3`, name: 'It\'s Me' },
+  { src: `${BASE}music/track32.mp3`, name: 'Love, older you' },
+  { src: `${BASE}music/track33.mp3`, name: 'Mamihlapinatapai' },
+  { src: `${BASE}music/track34.mp3`, name: 'paw, paw!' },
   { src: `${BASE}music/track1.mp3`,  name: 'Not me' },
   { src: `${BASE}music/track2.mp3`,  name: 'Not cute anymore' },
   { src: `${BASE}music/track3.mp3`,  name: 'Tick-Tack' },

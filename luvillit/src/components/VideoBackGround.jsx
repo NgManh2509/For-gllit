@@ -11,7 +11,7 @@ const VideoBackGround = () => {
 
     const loadVideo = () => {
       if (!video.src) {
-        video.src = 'https://res.cloudinary.com/dqdssnpbf/video/upload/f_auto,q_auto/v1775908840/videoMV/gjvw33co3bkskrmg9spc.webm';
+        video.src = 'https://res.cloudinary.com/dqdssnpbf/video/upload/f_auto,q_auto/v1777541748/videoMV/au5jynayhtbqci65oxgu.webm';
         video.play().catch(() => {});
       }
     };
